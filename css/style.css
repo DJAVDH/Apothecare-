@@ -1,0 +1,88 @@
+/* Algemene styling en variabelen */
+:root {
+    --page-background: #247BA0;
+    --button-color: #458C2F;
+    --button-hover: #377123;
+    --logo-text-color: #0A3D62;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --white-background: #FFFFFF;
+    --light-gray-text: #666666;
+    --section-background: #f8f9fa;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background-color: var(--white-background);
+    color: var(--text-color);
+}
+
+/* Header en Navigatie */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: var(--white-background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 3.5px;
+}
+
+.aptoocare-logo {
+    height: 60px;
+    width: auto;
+    margin-left: -40px;
+}
+
+.logo-text {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--logo-text-color);
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 16px;
+}
+
+.nav-button.primary {
+    background-color: var(--button-color);
+    color: white;
+    border-color: var(--button-color);
+}
+
+.nav-button.primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
+}
+
+.nav-button.secondary {
+    background-color: transparent;
+    color: var(--button-color);
+    border-color: var(--button-color);
+}
+
+.nav-button.secondary:hover {
+    background-color: #f0fff0;
+}
