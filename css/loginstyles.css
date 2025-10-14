@@ -16,47 +16,19 @@ body {
     color: var(--text-color);
     overflow: hidden;
 }
- 
-/* Header en Navigatie */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 40px; /* Iets minder padding verticaal */
-    background-color: var(--white-background);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
- 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 3.5px; /* Ruimte tussen logo-afbeelding en tekst */
-}
- 
-.aptoocare-logo {
-    height: 60px; /* Aanpassen aan de gewenste grootte van het logo */
-    width: auto;
-    margin-left: -40px;
-}
- 
-.logo-text { /* Voor de tekst "Apothecare" naast het logo */
-    font-size: 30px; /* Aangepast naar 30px voor een goede balans */
-    font-weight: 700;
-    color: var(--logo-text-color); /* Tekstkleur voor "Apothecare" */
-}
         /* Hoofdinhoud sectie */
         .main-content {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 50px;
-            background-color: #2a7a9b; /* Blauwe achtergrond */
+            background-color: var(--page-background); /* Blauwe achtergrond */
             min-height: 80vh;
             border-left: 2px solid black;
             border-right: 2px solid black;
             border-bottom: 2px solid black;
-            background-image: url('../images/apotheekbackground.png'); background-size: cover; background-repeat: no-repeat;
+            background-image: url("../assets/img/apotheekbackground.png");
+            background-size: cover; background-repeat: no-repeat;
         }
 
         /* Login container */

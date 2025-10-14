@@ -49,6 +49,9 @@ body {
     font-weight: 700;
     color: var(--logo-text-color);
 }
+.logo-link {
+    text-decoration: none;
+}
 
 .main-nav {
     display: flex;
