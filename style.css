@@ -1,0 +1,313 @@
+/* Algemene styling en variabelen */
+:root {
+    --page-background: #247BA0;
+    --button-color: #458C2F;
+    --button-hover: #377123;
+    --logo-text-color: #0A3D62;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --white-background: #FFFFFF;
+    --light-gray-text: #666666;
+    --section-background: #f8f9fa;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background-color: var(--white-background);
+    color: var(--text-color);
+}
+
+/* Header en Navigatie */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: var(--white-background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 3.5px;
+}
+
+.aptoocare-logo {
+    height: 60px;
+    width: auto;
+    margin-left: -40px;
+}
+
+.logo-text {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--logo-text-color);
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 16px;
+}
+
+.nav-button.primary {
+    background-color: var(--button-color);
+    color: white;
+    border-color: var(--button-color);
+}
+
+.nav-button.primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
+}
+
+.nav-button.secondary {
+    background-color: transparent;
+    color: var(--button-color);
+    border-color: var(--button-color);
+}
+
+.nav-button.secondary:hover {
+    background-color: #f0fff0;
+}
+
+/* Hoofdinhoud */
+.search-section {
+    background-color: var(--page-background);
+    padding: 120px 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 700px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--white-background);
+    border-radius: 30px;
+    padding: 12px 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    fill: var(--light-gray-text);
+    margin-right: 15px;
+}
+
+.search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 17px;
+    padding: 5px 0;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.search-input::placeholder {
+    color: var(--light-gray-text);
+}
+
+/* Producten Sectie */
+.products-section {
+    padding: 60px 40px;
+    background-color: var(--section-background);
+}
+
+.products-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--logo-text-color);
+    margin-bottom: 40px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    background-color: var(--white-background);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-card-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: var(--logo-text-color);
+}
+
+.product-card-content p {
+    margin: 0 0 20px 0;
+    color: var(--light-gray-text);
+    flex-grow: 1;
+}
+
+.details-button {
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.details-button:hover {
+    background-color: var(--button-hover);
+}
+
+/* AI Chat Knop */
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    background-color: var(--button-color);
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    z-index: 1001;
+}
+
+.chat-button:hover {
+    transform: scale(1.1);
+    background-color: var(--button-hover);
+}
+
+.plus-icon {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+
+/* Modal (Pop-up) Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background-color: var(--white-background);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) .modal-container {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 24px;
+    color: var(--logo-text-color);
+}
+
+.modal-close-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--light-gray-text);
+}
+
+.modal-body p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.hidden {
+    display: none;
+}
