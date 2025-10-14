@@ -1,0 +1,131 @@
+:root {
+    --page-background: #247BA0; /* Achtergrondkleur */
+    --button-color: #458C2F;     /* Knopkleur (Groen) */
+    --button-hover: #377123;     /* Iets donkerder groen bij hover */
+    --logo-text-color: #0A3D62;  /* Tekstkleur voor "Apothecare" bij logo */
+    --text-color: #333333;
+    --border-color: #bbdefb;
+    --white-background: #FFFFFF;
+    --light-gray-text: #666666;
+}
+ 
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background-color: var(--page-background);
+    color: var(--text-color);
+}
+ 
+/* Header en Navigatie */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px; /* Iets minder padding verticaal */
+    background-color: var(--white-background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+ 
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 3.5px; /* Ruimte tussen logo-afbeelding en tekst */
+}
+ 
+.aptoocare-logo {
+    height: 60px; /* Aanpassen aan de gewenste grootte van het logo */
+    width: auto;
+    margin-left: -40px;
+}
+ 
+.logo-text { /* Voor de tekst "Apothecare" naast het logo */
+    font-size: 30px; /* Aangepast naar 30px voor een goede balans */
+    font-weight: 700;
+    color: var(--logo-text-color); /* Tekstkleur voor "Apothecare" */
+}
+
+/* Primaire knop (Log In) */
+.nav-button.primary {
+    background-color: var(--button-color);
+    color: white;
+    border-color: var(--button-color);
+}
+ 
+.nav-button.primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
+}
+ 
+/* Secundaire knop (Cart) */
+.nav-button.secondary {
+    background-color: transparent;
+    color: var(--button-color);
+    border-color: var(--button-color);
+}
+ 
+.nav-button.secondary:hover {
+    background-color: #f0fff0; /* Zeer lichtgroen/wit */
+}
+        /* Hoofdinhoud sectie */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            background-color: #2a7a9b; /* Blauwe achtergrond */
+            min-height: 80vh;
+            border-left: 2px solid black;
+            border-right: 2px solid black;
+            border-bottom: 2px solid black;
+        }
+
+        /* Login container */
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ccc;
+            width: 300px;
+            text-align: left;
+        }
+
+        .login-container h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: normal;
+        }
+
+        /* Formulier elementen */
+        .login-form input[type="text"] {
+            width: calc(100% - 20px); /* Volledige breedte minus padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+        }
+        
+        /* Tekst labels boven de input velden */
+        .login-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .login-form .form-buttons {
+            display: flex;
+            gap: 10px; /* Ruimte tussen de knoppen */
+        }
+
+        .login-form button {
+            padding: 8px 16px;
+            border: 1px solid #000;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        .login-form p {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+        }
