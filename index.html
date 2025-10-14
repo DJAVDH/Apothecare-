@@ -1,18 +1,37 @@
-<!--
-Project: Apothecare
-Auteur: -
-Datum: 14-10-2025
-Descriptie: Dit is de hoofdpagina van de website 
--->
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Apothecare - Uw Online Apotheek</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+    <header class="main-header">
+        <div class="logo-container">
+            <img src="images/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
+            <div class="logo-text">Apothecare</div>
+        </div>
+        <nav class="main-nav">
+            <a href="#" class="nav-button secondary">Winkelmandje</a>
+            <a href="#" class="nav-button primary">Log In</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div class="search-container">
+            <div class="search-bar">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" placeholder="Zoek voor medicijnen, gezondheidsproducten..." class="search-input">
+            </div>
+        </div>
+    </main>
+
+    <button class="chat-button" aria-label="Open AI Chat">
+        <span class="plus-icon">+</span>
+    </button>
 </body>
 </html>

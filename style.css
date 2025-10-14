@@ -1,0 +1,165 @@
+/* Algemene styling */
+:root {
+    --page-background: #247BA0; /* Achtergrondkleur */
+    --button-color: #458C2F;     /* Knopkleur (Groen) */
+    --button-hover: #377123;     /* Iets donkerder groen bij hover */
+    --logo-text-color: #0A3D62;  /* Tekstkleur voor "Apothecare" bij logo */
+    --text-color: #333333;
+    --border-color: #bbdefb;
+    --white-background: #FFFFFF;
+    --light-gray-text: #666666;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    background-color: var(--page-background);
+    color: var(--text-color);
+}
+
+/* Header en Navigatie */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px; /* Iets minder padding verticaal */
+    background-color: var(--white-background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 3.5px; /* Ruimte tussen logo-afbeelding en tekst */
+}
+
+.aptoocare-logo {
+    height: 60px; /* Aanpassen aan de gewenste grootte van het logo */
+    width: auto;
+    margin-left: -40px;
+}
+
+.logo-text { /* Voor de tekst "Apothecare" naast het logo */
+    font-size: 30px; /* Aangepast naar 30px voor een goede balans */
+    font-weight: 700;
+    color: var(--logo-text-color); /* Tekstkleur voor "Apothecare" */
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 16px;
+}
+
+/* Primaire knop (Log In) */
+.nav-button.primary {
+    background-color: var(--button-color);
+    color: white;
+    border-color: var(--button-color);
+}
+
+.nav-button.primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
+}
+
+/* Secundaire knop (Cart) */
+.nav-button.secondary {
+    background-color: transparent;
+    color: var(--button-color);
+    border-color: var(--button-color);
+}
+
+.nav-button.secondary:hover {
+    background-color: #f0fff0; /* Zeer lichtgroen/wit */
+}
+
+/* Hoofdinhoud */
+.content-area {
+    padding: 60px 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 100px);
+}
+
+/* Zoekbalk */
+.search-container {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 50px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--white-background);
+    border-radius: 30px;
+    padding: 12px 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
+}
+
+.search-icon {
+    width: 22px;
+    height: 22px;
+    fill: var(--light-gray-text);
+    margin-right: 15px;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 17px;
+    padding: 5px 0;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.search-bar input::placeholder {
+    color: var(--light-gray-text);
+}
+
+/* AI Chat Knop */
+.chat-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    background-color: var(--button-color); /* Groen */
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.chat-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    background-color: var(--button-hover);
+}
+
+.plus-icon {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1;
+    padding-bottom: 2px;
+}
