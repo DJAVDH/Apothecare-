@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === "Escape" && !modalOverlay.classList.contains('hidden')) {
             closeModal();
         }
+        
     });
 
 });
