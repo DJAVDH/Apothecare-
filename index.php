@@ -1,3 +1,12 @@
+<?php
+include 'php/db_connect.php';
+include 'php/login.php';
+$isLoggedIn = isset($_SESSION['user_id']);
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -7,22 +16,23 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="main-body">
     <header class="main-header">
-    <a href="index.html" class="logo-link">
+    <a href="index.php" class="logo-link">
         <div class="logo-container">
             <img src="assets/img/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
             <div class="logo-text">Apothecare</div>
         </div>
-    </a>    
+    </a>   
         <nav class="main-nav">
             <a href="#" class="nav-button secondary">Winkelmandje</a>
-            <a href="login.html" class="nav-button primary">Log In</a>
+            <a id="LoginButton" href="login.html" class="nav-button primary">Log In</a>
         </nav>
     </header>
 
     <main class="content-area">
         <div class="search-section">
+            <h1 id="welkomMessage" class="welkom-text">WELKOM</h1>
             <div class="search-container">
                 <div class="search-bar">
                     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -57,5 +67,16 @@
     </div>
 
     <script src="js/mainpage.js"></script>
+    <script>
+<?php if ($isLoggedIn): ?>
+    const btn = document.getElementById("LoginButton");
+    const welkom = document.getElementById("welkomMessage");
+    if (btn) {
+        btn.textContent = "Log out";
+        btn.href = "php/logout.php";
+        welkom.textContent = "WELKOM, <?php echo htmlspecialchars($_SESSION['user_name']); ?>";
+    }
+<?php endif; ?>
+    </script>
 </body>
 </html>

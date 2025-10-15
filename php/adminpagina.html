@@ -1,57 +1,18 @@
-<?php
-session_start();
-include 'db_connect.php';
-
-// check login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit();
-}
-
-// Gebruiker verwijderen
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $conn->query("DELETE FROM users WHERE id = $id");
-    header("Location: adminpagina.php");
-    exit();
-}
-
-// Gebruiker toevoegen
-if (isset($_POST['add_user'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $role = $_POST['role'];
-    
-    $sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $name, $email, $password, $role);
-    $stmt->execute();
-    header("Location: adminpagina.php");
-    exit();
-}
-
-// Lijst met gebruikers ophalen
-$result = $conn->query("SELECT * FROM users");
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apothecare</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="admin-body">
 
     <header class="main-header">
-    <a href="index.html" class="logo-link">
+    <a href="../index.php" class="logo-link">
         <div class="logo-container">
-            <img src="assets/img/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
+            <img src="../assets/img/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
             <div class="logo-text">Apothecare</div>
         </div>
     </a>    
