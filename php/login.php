@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_role'] = $user['role'];
             $_SESSION['user_name'] = $user['name'];
 
-            header("Location: adminpagina.html");
+            header("Location: adminpagina.php");
             exit();
         } else {
             echo "Verkeerd wachtwoord.";
