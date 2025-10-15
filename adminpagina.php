@@ -1,11 +1,40 @@
 <?php
 session_start();
+include 'db_connect.php';
 
+// check login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit();
 }
+
+// Gebruiker verwijderen
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $conn->query("DELETE FROM users WHERE id = $id");
+    header("Location: adminpagina.php");
+    exit();
+}
+
+// Gebruiker toevoegen
+if (isset($_POST['add_user'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $role = $_POST['role'];
+    
+    $sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $name, $email, $password, $role);
+    $stmt->execute();
+    header("Location: adminpagina.php");
+    exit();
+}
+
+// Lijst met gebruikers ophalen
+$result = $conn->query("SELECT * FROM users");
 ?>
+
 
 
 <!DOCTYPE html>
@@ -53,6 +82,45 @@ if (!isset($_SESSION['user_id'])) {
     </nav>
 
     <main class="content-area">
+        <div id="Database" class="content-panel active">
+    <h1>Gebruikersbeheer</h1>
+
+    <!-- Gebruiker toevoegen -->
+    <form method="POST" style="background:#fff; padding:15px; border-radius:8px; width:400px;">
+        <h3>Nieuwe gebruiker toevoegen</h3>
+        <input type="text" name="name" placeholder="Naam" required style="width:100%; margin-bottom:8px;">
+        <input type="email" name="email" placeholder="E-mailadres" required style="width:100%; margin-bottom:8px;">
+        <input type="password" name="password" placeholder="Wachtwoord" required style="width:100%; margin-bottom:8px;">
+        <select name="role" required style="width:100%; margin-bottom:10px;">
+            <option value="user">Gebruiker</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button type="submit" name="add_user" style="padding:8px 16px; background:#67a746; border:none; color:white; border-radius:5px;">Toevoegen</button>
+    </form>
+
+    <!-- Gebruikerslijst -->
+    <h3 style="margin-top:30px;">Bestaande gebruikers</h3>
+    <table class="user-table" style="width:80%; border-collapse:collapse; background:#fff;">
+
+        <tr style="background:#2a7a8c; color:white;">
+            <th style="padding:10px;">ID</th>
+            <th>Naam</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acties</th>
+        </tr>
+        <?php while($row = $result->fetch_assoc()) { ?>
+        <tr>
+            <td style="padding:10px; text-align:center;"><?php echo $row['id']; ?></td>
+            <td><?php echo htmlspecialchars($row['name']); ?></td>
+            <td><?php echo htmlspecialchars($row['email']); ?></td>
+            <td><?php echo htmlspecialchars($row['role']); ?></td>
+            <td><a href="?delete=<?php echo $row['id']; ?>" style="color:red; font-weight:bold;">Verwijderen</a></td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
+
         <div id="Database" class="content-panel active">
             <h1>Database</h1>
             <p>Hier komt de inhoud voor de database. U kunt hier patiëntgegevens, medicatie-informatie en artsen beheren.</p>

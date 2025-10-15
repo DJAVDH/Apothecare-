@@ -190,3 +190,11 @@
             font-weight: 700;
             color: #0A3D62;
         }
+
+.user-table {
+    color: #000;         /* zwarte tekst */
+    padding: 10px;
+    text-align: left;
+}
+
+
