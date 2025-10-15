@@ -19,6 +19,10 @@ body {
     color: var(--text-color);
 }
 
+.admin-body {
+    background-color: var(--page-background);
+ 
+}
 /* Specifieke body stijlen voor afwijkende pagina's */
 body.admin-page {
     background-color: #2a7a8c;
@@ -353,9 +357,21 @@ body.login-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    flex-direction: column;
 }
-
+.search-text{
+    color: red;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+.welkom-text{
+    color: var(--white-background);
+    font-size: 48px;
+    font-weight: 700;
+    margin-right: 50px;
+    margin-bottom: 30px;
+}
 .search-container {
     width: 100%;
     max-width: 700px;

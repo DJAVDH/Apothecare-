@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2025 at 10:43 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Gegenereerd op: 15 okt 2025 om 15:27
+-- Serverversie: 10.4.32-MariaDB
+-- PHP-versie: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Tabelstructuur voor tabel `orders`
 --
 
 CREATE TABLE `orders` (
@@ -38,7 +38,7 @@ CREATE TABLE `orders` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_items`
+-- Tabelstructuur voor tabel `order_items`
 --
 
 CREATE TABLE `order_items` (
@@ -52,7 +52,7 @@ CREATE TABLE `order_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Tabelstructuur voor tabel `products`
 --
 
 CREATE TABLE `products` (
@@ -67,7 +67,7 @@ CREATE TABLE `products` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Tabelstructuur voor tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -79,25 +79,27 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Gegevens worden geëxporteerd voor tabel `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
-(1, 'Delano', 'delano@test.nl', '$2y$10$jMv0e3DmZ6WMov/cKwOLEusH5BF7HZIp7TPZcrHxOyYYdFVAvMdeW', 'admin');
+(1, 'Delano', 'delano@test.nl', '$2y$10$jMv0e3DmZ6WMov/cKwOLEusH5BF7HZIp7TPZcrHxOyYYdFVAvMdeW', 'admin'),
+(2, 'admin', 'admin@apothecare.com', 'admin12345', 'admin'),
+(3, 'john', 'john@gmail.com', 'password', 'customer');
 
 --
--- Indexes for dumped tables
+-- Indexen voor geëxporteerde tabellen
 --
 
 --
--- Indexes for table `orders`
+-- Indexen voor tabel `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `order_items`
+-- Indexen voor tabel `order_items`
 --
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`id`),
@@ -105,58 +107,58 @@ ALTER TABLE `order_items`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Indexes for table `products`
+-- Indexen voor tabel `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- Indexen voor tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT voor geëxporteerde tabellen
 --
 
 --
--- AUTO_INCREMENT for table `orders`
+-- AUTO_INCREMENT voor een tabel `orders`
 --
 ALTER TABLE `orders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order_items`
+-- AUTO_INCREMENT voor een tabel `order_items`
 --
 ALTER TABLE `order_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `products`
+-- AUTO_INCREMENT voor een tabel `products`
 --
 ALTER TABLE `products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT voor een tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- Beperkingen voor geëxporteerde tabellen
 --
 
 --
--- Constraints for table `orders`
+-- Beperkingen voor tabel `orders`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `order_items`
+-- Beperkingen voor tabel `order_items`
 --
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),

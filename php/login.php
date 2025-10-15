@@ -2,31 +2,34 @@
 session_start();
 include 'db_connect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['user_name'] = $user['name'];
-
-            header("Location: adminpagina.php");
-            exit();
-        } else {
-            echo "Verkeerd wachtwoord.";
-        }
-    } else {
-        echo "Gebruiker niet gevonden.";
+$error = '';    
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+     // check email en wachtwoord en pak gebruiker van database
+    if($email && $password){
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+if ($user && $user['role'] == 'admin' && $password == $user['password']) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_name'] = $user['name'] ?? ''; // if you store name
+            header('Location: adminpagina.html');
+
+} elseif ($user && $user['role'] == 'customer' && $password == $user['password']) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_name'] = $user['name'] ?? ''; // if you store name
+            header('Location: ../index.php');
+
+} else {
+            $error = 'INLOG FAILED';
+            header('Location: ../login.html');
+
+}
 }
 ?>
