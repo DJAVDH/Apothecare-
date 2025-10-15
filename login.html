@@ -26,17 +26,19 @@
                 <img src="assets//img/aptoocare.png" alt="Apotheek Logo" style="max-width: 100px; margin-bottom: 15px;">
             </div>
             <h2>Login</h2>
-            <form class="login-form">
-                <input type="text" id="username" name="username" placeholder="E-mailadres">
+<form class="login-form" method="POST" action="login.php">
+    <label for="email">E-mailadres</label>
+    <input type="text" id="email" name="email" placeholder="E-mailadres" required>
                 
-                <input type="text" id="password" name="password" placeholder="Wachtwoord">
+    <label for="password">Wachtwoord</label>
+    <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
                 
-                <div class="form-buttons">
-                    <button type="submit">Inloggen</button>
-                    <button type="button">Registeren</button><br>
-                </div>
-                <p>Wachtwoord vergeten? <a href="#"Wachtwoord vergeten?></a></p>
-            </form>
+    <div class="form-buttons">
+        <button type="submit">Inloggen</button>
+        <button type="button">Registreren</button><br>
+    </div>
+</form>
+
         </div>
     </main>
 
