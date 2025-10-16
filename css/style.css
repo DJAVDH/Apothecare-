@@ -308,6 +308,24 @@ body.login-page {
     border: 1px solid #000;
 }
 
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 14px 12px;
+    margin-bottom: 18px;
+    border: 2px solid #247BA0;
+    border-radius: 10px;
+    font-size: 17px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #458C2F;
+    outline: none;
+}
+
 .login-form label {
     display: block;
     margin-bottom: 5px;
@@ -321,11 +339,12 @@ body.login-page {
 }
 
 .login-form button {
-    padding: 8px 16px;
+    padding: 12px 28px;
     border: 1px solid #000;
     background-color: #67a746;
     cursor: pointer;
     border-radius: 10px;
+    font-size: 18px;
 }
 
 .login-form p {
