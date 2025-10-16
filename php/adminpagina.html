@@ -69,6 +69,15 @@
             <th>Rol</th>
             <th>Acties</th>
         </tr>
+        <?php while($row = $result->fetch_assoc()) { ?>
+        <tr>
+            <td style="padding:10px; text-align:center;"><?php echo $row['id']; ?></td>
+            <td><?php echo htmlspecialchars($row['name']); ?></td>
+            <td><?php echo htmlspecialchars($row['email']); ?></td>
+            <td><?php echo htmlspecialchars($row['role']); ?></td>
+            <td><a href="?delete=<?php echo $row['id']; ?>" style="color:red; font-weight:bold;">Verwijderen</a></td>
+        </tr>
+        <?php } ?>
     </table>
 </div>
 

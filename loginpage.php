@@ -1,3 +1,10 @@
+<?php
+include 'php/db_connect.php';
+include 'php/login.php';
+$invalidInfo = isset($_SESSION['invalid_info']);
+?>
+
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -24,22 +31,26 @@
             <div style="display: flex; justify-content: center;">
                 <img src="assets//img/aptoocare.png" alt="Apotheek Logo" style="max-width: 100px; margin-bottom: 15px;">
             </div>
-            <h2>Login</h2>
+                <h2>Login</h2>
 <form class="login-form" method="POST" action="php/login.php">
-    <label for="email">E-mailadres</label>
-    <input type="email" id="email" name="email" placeholder="E-mailadres" required>
-                
-    <label for="password">Wachtwoord</label>
-    <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
-                
+        <label for="email">E-mailadres</label>
+        <input type="email" id="email" name="email" placeholder="E-mailadres" required>  
+        <label for="password">Wachtwoord</label>
+        <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
+        <p id="error-message"></p>     
     <div class="form-buttons">
         <button type="submit">Inloggen</button>
         <button type="button">Registreren</button><br>
     </div>
 </form>
-
-        </div>
+            </div>
     </main>
-
+    <script>
+<?php if ($invalidInfo): ?>
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'Ongeldige email of wachtwoord. Probeer het opnieuw.';
+            errorMessage.style.color = 'red';
+<?php endif; ?>
+    </script>
 </body>
 </html>
