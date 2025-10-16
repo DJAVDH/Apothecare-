@@ -4,9 +4,6 @@ include 'php/login.php';
 $isLoggedIn = isset($_SESSION['user_id']);
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -23,7 +20,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <img src="assets/img/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
             <div class="logo-text">Apothecare</div>
         </div>
-    </a>   
+    </a> 
         <nav class="main-nav">
             <a href="#" class="nav-button secondary">Winkelmandje</a>
             <a id="LoginButton" href="login.html" class="nav-button primary">Log In</a>
@@ -51,7 +48,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </main>
 
     <button class="chat-button" aria-label="Open AI Chat">
-        <span class="plus-icon">+</span>
+        <span class="chat-icon">+</span>
     </button>
 
     <div id="productModal" class="modal-overlay hidden">
@@ -63,6 +60,26 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <div class="modal-body">
                 <p id="modalDescription"></p>
             </div>
+        </div>
+    </div>
+
+    <div id="aiChatbox" class="chat-container hidden">
+        <div class="chat-header">
+            <h3>Apothecare AI Assistent</h3>
+            <button id="closeChat" class="chat-close-button">&times;</button>
+        </div>
+        <div id="chatMessages" class="chat-messages">
+            <div class="message ai-message">
+                <p>Hallo! Hoe kan ik u vandaag helpen?</p>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="Stel uw vraag...">
+            <button id="sendChat" aria-label="Verstuur bericht">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2 .01 7z"/>
+                </svg>
+            </button>
         </div>
     </div>
 

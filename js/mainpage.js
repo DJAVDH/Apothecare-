@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     // Array met productinformatie
     const products = [
         {
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // Selecteer de DOM-elementen
+    // Selecteer de DOM-elementen voor producten
     const productsGrid = document.querySelector('.products-grid');
     const modalOverlay = document.getElementById('productModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -63,43 +64,106 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Voeg een event listener toe aan de knop
         card.querySelector('.details-button').addEventListener('click', () => {
             openModal(product);
         });
 
-        // Voeg de kaart toe aan het grid
         productsGrid.appendChild(card);
     });
 
-    // Functie om de modal te openen
+    // Functie om de product-modal te openen
     function openModal(product) {
         modalTitle.textContent = product.name;
         modalDescription.textContent = product.description;
-        modalOverlay.classList.remove('hidden');
-        // Gebruik de classList van de overlay voor de transitie
         modalOverlay.style.display = 'flex'; 
         setTimeout(() => modalOverlay.classList.remove('hidden'), 10);
     }
 
-    // Functie om de modal te sluiten
+    // Functie om de product-modal te sluiten
     function closeModal() {
         modalOverlay.classList.add('hidden');
+        setTimeout(() => {
+            if (modalOverlay.classList.contains('hidden')) {
+                modalOverlay.style.display = 'none';
+            }
+        }, 300); 
+    }
+    
+    if(modalOverlay.classList.contains('hidden')){
+        modalOverlay.style.display = 'none';
     }
 
-    // Event listeners om de modal te sluiten
+    // Event listeners om de product-modal te sluiten
     modalCloseButton.addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', (event) => {
-        // Sluit alleen als er op de overlay zelf wordt geklikt, niet op de content
         if (event.target === modalOverlay) {
             closeModal();
         }
     });
 
-    // Sluit de modal met de Escape-toets
     document.addEventListener('keydown', (e) => {
         if (e.key === "Escape" && !modalOverlay.classList.contains('hidden')) {
             closeModal();
+        }
+    });
+
+    // --- AI CHATBOX LOGICA ---
+
+    // Selecteer de DOM-elementen voor de chatbox
+    const chatButton = document.querySelector('.chat-button');
+    const chatIcon = document.querySelector('.chat-icon');
+    const aiChatbox = document.getElementById('aiChatbox');
+    const closeChatButton = document.getElementById('closeChat');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendChatButton = document.getElementById('sendChat');
+
+    // Functie om de chatbox te openen/sluiten
+    function toggleChatbox() {
+        aiChatbox.classList.toggle('hidden');
+        chatButton.classList.toggle('open');
+
+        if (chatButton.classList.contains('open')) {
+            chatIcon.textContent = '×';
+            chatIcon.style.paddingBottom = '0px'; 
+        } else {
+            chatIcon.textContent = '+';
+            chatIcon.style.paddingBottom = '2px';
+        }
+    }
+
+    // Functie om een bericht te versturen
+    function sendMessage() {
+        const userText = chatInput.value.trim();
+        if (userText === '') return;
+
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.innerHTML = `<p>${userText}</p>`;
+        chatMessages.appendChild(userMessageDiv);
+
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        setTimeout(getAiResponse, 1000);
+    }
+
+    // Functie om een AI-antwoord te genereren
+    function getAiResponse() {
+        const aiMessageDiv = document.createElement('div');
+        aiMessageDiv.className = 'message ai-message';
+        aiMessageDiv.innerHTML = `<p>Bedankt voor uw vraag. Ik ben een demo-assistent. Hoe kan ik u verder helpen met informatie over onze producten?</p>`;
+        chatMessages.appendChild(aiMessageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Event listeners voor de chatbox
+    chatButton.addEventListener('click', toggleChatbox);
+    closeChatButton.addEventListener('click', toggleChatbox);
+    sendChatButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
         }
     });
 
