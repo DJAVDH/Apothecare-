@@ -1,7 +1,8 @@
 <?php
 include 'php/db_connect.php';
 include 'php/login.php';
-$isLoggedIn = isset($_SESSION['user_id']);
+$loggedIn = isset($_SESSION['user_id']);
+echo $loggedIn;
 ?>
 
 
@@ -26,7 +27,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </a>   
         <nav class="main-nav">
             <a href="#" class="nav-button secondary">Winkelmandje</a>
-            <a id="LoginButton" href="login.html" class="nav-button primary">Log In</a>
+            <a id="LoginButton" href="loginpage.php" class="nav-button primary">Log In</a>
         </nav>
     </header>
 
@@ -68,15 +69,15 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
     <script src="js/mainpage.js"></script>
     <script>
-<?php if ($isLoggedIn): ?>
+<?php if ($loggedIn): ?>
     const btn = document.getElementById("LoginButton");
     const welkom = document.getElementById("welkomMessage");
-    if (btn) {
         btn.textContent = "Log out";
         btn.href = "php/logout.php";
         welkom.textContent = "WELKOM, <?php echo htmlspecialchars($_SESSION['user_name']); ?>";
-    }
+
 <?php endif; ?>
     </script>
+<?php unset($_SESSION['invalid_info']);?>
 </body>
 </html>
