@@ -1,6 +1,8 @@
 <?php
+//haal database connectie en login info 
 include 'php/db_connect.php';
 include 'php/login.php';
+//check als user is ingelogd
 $isLoggedIn = isset($_SESSION['user_id']);
 ?>
 
@@ -14,6 +16,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="main-body">
+    <!--Header-->
     <header class="main-header">
     <a href="index.php" class="logo-link">
         <div class="logo-container">
@@ -23,10 +26,10 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </a> 
         <nav class="main-nav">
             <a href="#" class="nav-button secondary">Winkelmandje</a>
-            <a id="LoginButton" href="login.html" class="nav-button primary">Log In</a>
+            <a id="LoginButton" href="loginpage.php" class="nav-button primary">Log In</a>
         </nav>
     </header>
-
+    <!--Main-->
     <main class="content-area">
         <div class="search-section">
             <h1 id="welkomMessage" class="welkom-text">WELKOM</h1>
@@ -39,14 +42,14 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 </div>
             </div>
         </div>
-
+    <!--Gridbox voor producten-->
         <section id="products" class="products-section">
             <h2 class="products-title">Onze Producten</h2>
             <div class="products-grid">
                 </div>
         </section>
     </main>
-
+    <!--Chat-->
     <button class="chat-button" aria-label="Open AI Chat">
         <span class="chat-icon">+</span>
     </button>
@@ -82,7 +85,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             </button>
         </div>
     </div>
-
+    <!--Script en inlog ding-->
     <script src="js/mainpage.js"></script>
     <script>
 <?php if ($isLoggedIn): ?>

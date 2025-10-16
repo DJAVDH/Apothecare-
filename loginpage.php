@@ -15,7 +15,7 @@ $invalidInfo = isset($_SESSION['invalid_info']);
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="login-body">
-
+    <!--Header-->
     <header class="main-header">
     <a href="index.php" class="logo-link">
         <div class="logo-container">
@@ -24,7 +24,7 @@ $invalidInfo = isset($_SESSION['invalid_info']);
         </div>
     </a>        
     </header>
-
+    <!--Inputfield Knoppen inlog-->
     <main class="main-content">
         <div class="login-container enhanced-login" style="text-align: center;">
             <!-- Logo afbeelding gecentreerd -->
@@ -45,6 +45,7 @@ $invalidInfo = isset($_SESSION['invalid_info']);
 </form>
             </div>
     </main>
+        <!--Script voor wanneer inloggen niet goed gaat-->
     <script>
 <?php if ($invalidInfo): ?>
             const errorMessage = document.getElementById('error-message');
