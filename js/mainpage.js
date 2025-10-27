@@ -193,12 +193,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Functie om een AI-antwoord te genereren
-    function getAiResponse() {
-        const aiMessageDiv = document.createElement('div');
-        aiMessageDiv.className = 'message ai-message';
-        aiMessageDiv.innerHTML = `<p>Bedankt voor uw vraag. Ik ben een demo-assistent. Hoe kan ik u verder helpen met informatie over onze producten?</p>`;
-        chatMessages.appendChild(aiMessageDiv);
+    async function getAiResponse(question, attempt = 0) {
+        const maxRetries = 2;
+
+        // show a temporary typing indicator (reuse per call so retries don't duplicate)
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message ai-message typing';
+        typingDiv.innerHTML = `<p>Even geduld, ik denk na...</p>`;
+        chatMessages.appendChild(typingDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const resp = await fetch('ai.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ vraag: question })
+            });
+
+            if (!resp.ok) throw new Error('Network response was not ok (' + resp.status + ')');
+            const data = await resp.json();
+            const answer = data.response || 'Sorry, geen antwoord ontvangen.';
+
+            // replace typing indicator with actual answer
+            typingDiv.className = 'message ai-message';
+            typingDiv.innerHTML = `<p>${answer}</p>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } catch (err) {
+            // retry for transient errors
+            if (attempt < maxRetries) {
+                typingDiv.innerHTML = `<p>Verbinden mislukt. Probeer opnieuw... (${attempt + 1})</p>`;
+                // wait a bit and retry (increasing delay)
+                await new Promise(res => setTimeout(res, 400 * (attempt + 1)));
+                // remove indicator before retry to avoid duplicates
+                typingDiv.remove();
+                return getAiResponse(question, attempt + 1);
+            }
+
+            typingDiv.className = 'message ai-message error';
+            typingDiv.innerHTML = `<p>Fout bij verbinden met de AI: ${err.message}. Probeer het later opnieuw.</p>`;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
 
     // Event listeners voor de chatbox
