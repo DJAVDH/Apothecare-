@@ -189,8 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        // Send message to backend AI endpoint
-        getAiResponse(userText);
+        setTimeout(getAiResponse, 1000);
     }
 
     // Functie om een AI-antwoord te genereren
