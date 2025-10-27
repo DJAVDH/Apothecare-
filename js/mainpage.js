@@ -50,8 +50,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     const modalCloseButton = document.getElementById('modalClose');
+    const searchInput = document.querySelector('.search-input');
 
-    // Genereer de product kaarten op de pagina
+    // Functie om producten te filteren en weer te geven
+    function filterProducts(searchTerm) {
+        const filteredProducts = products.filter(product => {
+            const searchLower = searchTerm.toLowerCase();
+            return product.name.toLowerCase().includes(searchLower) ||
+                   product.description.toLowerCase().includes(searchLower);
+        });
+        
+        // Maak de products grid leeg
+        productsGrid.innerHTML = '';
+        
+        // Voeg de gefilterde producten toe
+        filteredProducts.forEach(product => {
+            const card = createProductCard(product);
+            productsGrid.appendChild(card);
+        });
+    }
+
+    // Functie om een product kaart te maken
+    function createProductCard(product) {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-card-content">
+                <h3>${product.name}</h3>
+                <p>${product.description.substring(0, 100)}...</p>
+                <button class="details-button">Bekijk details</button>
+            </div>
+        `;
+
+        card.querySelector('.details-button').addEventListener('click', () => {
+            openModal(product);
+        });
+
+        return card;
+    }
+
+    // Event listener voor de zoekbalk
+    searchInput.addEventListener('input', (e) => {
+        filterProducts(e.target.value);
+    });
+
+    // Initiële weergave van alle producten
     products.forEach(product => {
         const card = document.createElement('div');
         card.className = 'product-card';
