@@ -3,6 +3,34 @@ session_start();
 require_once 'db_connect.php';
 
 try {
+    // Gebruiker bijwerken logica
+    if(isset($_POST['edit_user'])) {
+        try {
+            $update_query = "UPDATE users SET name = :name, email = :email, role = :role WHERE id = :id";
+            $stmt_update = $pdo->prepare($update_query);
+            
+            $params = [
+                ':id' => $_POST['user_id'],
+                ':name' => $_POST['name'],
+                ':email' => $_POST['email'],
+                ':role' => $_POST['role']
+            ];
+
+            // Als er een nieuw wachtwoord is opgegeven, update dan ook het wachtwoord
+            if(!empty($_POST['password'])) {
+                $update_query = "UPDATE users SET name = :name, email = :email, role = :role, password = :password WHERE id = :id";
+                $params[':password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            }
+            
+            $stmt_update = $pdo->prepare($update_query);
+            if($stmt_update->execute($params)) {
+                header("Location: ".$_SERVER['PHP_SELF']);
+                exit();
+            }
+        } catch(PDOException $e) {
+            error_log("Fout bij bijwerken gebruiker: " . $e->getMessage());
+        }
+    }
 
     // Query om alle gebruikers op te halen
     $query = "SELECT * FROM users ORDER BY id";
@@ -105,7 +133,7 @@ try {
                 <input type="email" name="email" placeholder="E-mailadres" required style="width:100%; margin-bottom:8px;">
                 <input type="password" name="password" placeholder="Wachtwoord" required style="width:100%; margin-bottom:8px;">
                 <select name="role" required style="width:100%; margin-bottom:10px;">
-                    <option value="user">Gebruiker</option>
+                    <option value="customer">customer</option>
                     <option value="admin">Admin</option>
                 </select>
                 <button type="submit" name="add_user" style="padding:8px 16px; background:#67a746; border:none; color:white; border-radius:5px;">Toevoegen</button>
@@ -141,6 +169,10 @@ try {
                                 echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['email']) . "</td>";
                                 echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['role']) . "</td>";
                                 echo "<td style='padding:12px 15px;'>";
+                                echo "<button onclick='openEditModal(" . json_encode($user) . ")' 
+                                      style='color:#2a7a8c; text-decoration:none; padding:5px 10px; border-radius:3px; 
+                                      background:#e3f2fd; border:none; cursor:pointer; margin-right:5px; transition:all 0.3s ease;'>
+                                      Bewerken</button>";
                                 echo "<a href='?delete=" . $user['id'] . "' 
                                       onclick='return confirm(\"Weet je zeker dat je deze gebruiker wilt verwijderen?\")' 
                                       style='color:#ff4444; text-decoration:none; padding:5px 10px; border-radius:3px; 
@@ -161,6 +193,77 @@ try {
             </table>
         </div>
     </div>
+
+    <!-- Bewerk Modal -->
+    <div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+         background:rgba(0,0,0,0.5); z-index:1000;">
+        <div style="position:relative; background:white; width:400px; margin:100px auto; padding:20px; border-radius:8px;">
+            <h3 style="color:#333; margin-bottom:20px;">Gebruiker Bewerken</h3>
+            <form method="POST" id="editForm">
+                <input type="hidden" name="user_id" id="edit_user_id">
+                <input type="hidden" name="edit_user" value="1">
+                
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; color:#333;">Naam:</label>
+                    <input type="text" name="name" id="edit_name" required 
+                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; color:#333;">Email:</label>
+                    <input type="email" name="email" id="edit_email" required 
+                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; color:#333;">Nieuw Wachtwoord: (laat leeg om niet te wijzigen)</label>
+                    <input type="password" name="password" id="edit_password"
+                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                </div>
+
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; color:#333;">Rol:</label>
+                    <select name="role" id="edit_role" required 
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                        <option value="customer">Klant</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:10px;">
+                    <button type="button" onclick="closeEditModal()" 
+                            style="padding:8px 16px; background:#f44336; border:none; color:white; border-radius:4px; cursor:pointer;">
+                            Annuleren</button>
+                    <button type="submit" 
+                            style="padding:8px 16px; background:#67a746; border:none; color:white; border-radius:4px; cursor:pointer;">
+                            Opslaan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal(user) {
+            document.getElementById('editModal').style.display = 'block';
+            document.getElementById('edit_user_id').value = user.id;
+            document.getElementById('edit_name').value = user.name;
+            document.getElementById('edit_email').value = user.email;
+            document.getElementById('edit_role').value = user.role;
+            document.getElementById('edit_password').value = ''; // Wachtwoord veld leeg laten
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Sluit modal als er buiten wordt geklikt
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
+    </script>
             </div>
         </div>
 
