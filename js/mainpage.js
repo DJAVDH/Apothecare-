@@ -189,39 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        // Send message to backend AI endpoint
-        getAiResponse(userText);
+        setTimeout(getAiResponse, 1000);
     }
 
     // Functie om een AI-antwoord te genereren
-    async function getAiResponse(question) {
-        // show a temporary typing indicator
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'message ai-message typing';
-        typingDiv.innerHTML = `<p>Even geduld, ik denk na...</p>`;
-        chatMessages.appendChild(typingDiv);
+    function getAiResponse() {
+        const aiMessageDiv = document.createElement('div');
+        aiMessageDiv.className = 'message ai-message';
+        aiMessageDiv.innerHTML = `<p>Bedankt voor uw vraag. Ik ben een demo-assistent. Hoe kan ik u verder helpen met informatie over onze producten?</p>`;
+        chatMessages.appendChild(aiMessageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        try {
-            const resp = await fetch('ai.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ vraag: question })
-            });
-
-            if (!resp.ok) throw new Error('Network response was not ok');
-            const data = await resp.json();
-            const answer = data.response || 'Sorry, geen antwoord ontvangen.';
-
-            // replace typing indicator with actual answer
-            typingDiv.className = 'message ai-message';
-            typingDiv.innerHTML = `<p>${answer}</p>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        } catch (err) {
-            typingDiv.className = 'message ai-message error';
-            typingDiv.innerHTML = `<p>Fout bij verbinden met de AI: ${err.message}</p>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
     }
 
     // Event listeners voor de chatbox
