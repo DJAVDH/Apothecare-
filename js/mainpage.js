@@ -1,24 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-<<<<<<< Updated upstream
     const productsGrid = document.querySelector('.products-grid');
     if (!productsGrid) {
         return;
     }
 
-=======
-    
-
-
-    // Selecteer de DOM-elementen voor producten
-    const productsGrid = document.querySelector('.products-grid');
->>>>>>> Stashed changes
     const modalOverlay = document.getElementById('productModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     const modalCloseButton = document.getElementById('modalClose');
     const searchInput = document.querySelector('.search-input');
 
-<<<<<<< Updated upstream
     const productData = Array.from(productsGrid.querySelectorAll('.product-card')).map(card => ({
         element: card,
         name: card.dataset.name || card.querySelector('h3')?.textContent?.trim() || '',
@@ -75,81 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
             filterProducts(e.target.value);
         });
     }
-=======
-    // Functie om producten te filteren en weer te geven
-    function filterProducts(searchTerm) {
-        const filteredProducts = products.filter(product => {
-            const searchLower = searchTerm.toLowerCase();
-            return product.name.toLowerCase().includes(searchLower) ||
-                   product.description.toLowerCase().includes(searchLower);
-        });
-        
-        // Maak de products grid leeg
-        productsGrid.innerHTML = '';
-        
-        // Voeg de gefilterde producten toe
-        filteredProducts.forEach(product => {
-            const card = createProductCard(product);
-            productsGrid.appendChild(card);
-        });
-    }
-
-    // Functie om een product kaart te maken
-    function createProductCard(product) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-card-content">
-                <h3>${product.name}</h3>
-                <p>${product.description.substring(0, 100)}...</p>
-                <button class="details-button">Bekijk details</button>
-            </div>
-        `;
-
-        card.querySelector('.details-button').addEventListener('click', () => {
-            openModal(product);
-        });
-
-        return card;
-    }
-
-    // Event listener voor de zoekbalk
-    searchInput.addEventListener('input', (e) => {
-        filterProducts(e.target.value);
-    });
-
-    // Initiële weergave van alle producten
-    products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-card-content">
-                <h3>${product.name}</h3>
-                <p>${product.description.substring(0, 100)}...</p>
-                <button class="details-button">Bekijk details</button>
-            </div>
-        `;
-
-        card.querySelector('.details-button').addEventListener('click', () => {
-            openModal(product);
-        });
-
-        productsGrid.appendChild(card);
-    });
->>>>>>> Stashed changes
 
     // Functie om de product-modal te openen
     function openModal(product) {
         modalTitle.textContent = product.name;
-<<<<<<< Updated upstream
         const description = product.description || 'Geen beschrijving beschikbaar.';
         const priceInfo = product.price ? ` (Prijs: € ${product.price})` : '';
         modalDescription.textContent = `${description}${priceInfo}`;
-=======
-        modalDescription.textContent = product.description;
->>>>>>> Stashed changes
         modalOverlay.style.display = 'flex'; 
         setTimeout(() => modalOverlay.classList.remove('hidden'), 10);
     }
@@ -169,13 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listeners om de product-modal te sluiten
-<<<<<<< Updated upstream
     if (modalCloseButton) {
         modalCloseButton.addEventListener('click', closeModal);
     }
-=======
-    modalCloseButton.addEventListener('click', closeModal);
->>>>>>> Stashed changes
     modalOverlay.addEventListener('click', (event) => {
         if (event.target === modalOverlay) {
             closeModal();
@@ -226,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-<<<<<<< Updated upstream
         // Send message to backend AI endpoint
         getAiResponse(userText);
     }
@@ -234,16 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Functie om een AI-antwoord te genereren
     async function getAiResponse(question) {
         // show a temporary typing indicator
-=======
-        setTimeout(getAiResponse, 1000);
-    }
-
-    // Functie om een AI-antwoord te genereren
-    async function getAiResponse(question, attempt = 0) {
-        const maxRetries = 2;
-
-        // show a temporary typing indicator (reuse per call so retries don't duplicate)
->>>>>>> Stashed changes
         const typingDiv = document.createElement('div');
         typingDiv.className = 'message ai-message typing';
         typingDiv.innerHTML = `<p>Even geduld, ik denk na...</p>`;
@@ -257,11 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: new URLSearchParams({ vraag: question })
             });
 
-<<<<<<< Updated upstream
             if (!resp.ok) throw new Error('Network response was not ok');
-=======
-            if (!resp.ok) throw new Error('Network response was not ok (' + resp.status + ')');
->>>>>>> Stashed changes
             const data = await resp.json();
             const answer = data.response || 'Sorry, geen antwoord ontvangen.';
 
@@ -270,23 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
             typingDiv.innerHTML = `<p>${answer}</p>`;
             chatMessages.scrollTop = chatMessages.scrollHeight;
         } catch (err) {
-<<<<<<< Updated upstream
             typingDiv.className = 'message ai-message error';
             typingDiv.innerHTML = `<p>Fout bij verbinden met de AI: ${err.message}</p>`;
-=======
-            // retry for transient errors
-            if (attempt < maxRetries) {
-                typingDiv.innerHTML = `<p>Verbinden mislukt. Probeer opnieuw... (${attempt + 1})</p>`;
-                // wait a bit and retry (increasing delay)
-                await new Promise(res => setTimeout(res, 400 * (attempt + 1)));
-                // remove indicator before retry to avoid duplicates
-                typingDiv.remove();
-                return getAiResponse(question, attempt + 1);
-            }
-
-            typingDiv.className = 'message ai-message error';
-            typingDiv.innerHTML = `<p>Fout bij verbinden met de AI: ${err.message}. Probeer het later opnieuw.</p>`;
->>>>>>> Stashed changes
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
