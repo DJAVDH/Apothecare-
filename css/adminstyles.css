@@ -1,6 +1,6 @@
 /* Algemene stijlen en kleurvariabelen */
 :root {
-    --admin-background: #2a7a8c; /* donkerblauw-groen voor admin header/nav */
+    --admin-background: #247BA0; /* donkerblauw-groen voor admin header/nav */
     --page-background: #247BA0;
     --button-color: #67a746; /* primaire actieknop (groen) */
     --button-hover: #459132;
