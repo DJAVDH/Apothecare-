@@ -3,6 +3,63 @@ session_start();
 require_once 'db_connect.php';
 
 try {
+    // Product toevoegen logica
+    if(isset($_POST['add_product'])) {
+        try {
+            $insert_query = "INSERT INTO products (name, price, stock) VALUES (:name, :price, :stock)";
+            $stmt_insert = $pdo->prepare($insert_query);
+            
+            $params = [
+                ':name' => $_POST['product_name'],
+                ':price' => $_POST['price'],
+                ':stock' => $_POST['stock']
+            ];
+            
+            if($stmt_insert->execute($params)) {
+                header("Location: ".$_SERVER['PHP_SELF']);
+                exit();
+            }
+        } catch(PDOException $e) {
+            error_log("Fout bij toevoegen product: " . $e->getMessage());
+        }
+    }
+
+    // Product bijwerken logica
+    if(isset($_POST['edit_product'])) {
+        try {
+            $update_query = "UPDATE products SET name = :name, price = :price, stock = :stock WHERE id = :id";
+            $stmt_update = $pdo->prepare($update_query);
+            
+            $params = [
+                ':id' => $_POST['product_id'],
+                ':name' => $_POST['product_name'],
+                ':price' => $_POST['price'],
+                ':stock' => $_POST['stock']
+            ];
+            
+            if($stmt_update->execute($params)) {
+                header("Location: ".$_SERVER['PHP_SELF']);
+                exit();
+            }
+        } catch(PDOException $e) {
+            error_log("Fout bij bijwerken product: " . $e->getMessage());
+        }
+    }
+
+    // Product verwijderen logica
+    if(isset($_GET['delete_product'])) {
+        try {
+            $delete_query = "DELETE FROM products WHERE id = :id";
+            $stmt_delete = $pdo->prepare($delete_query);
+            
+            if($stmt_delete->execute([':id' => $_GET['delete_product']])) {
+                header("Location: ".$_SERVER['PHP_SELF']);
+                exit();
+            }
+        } catch(PDOException $e) {
+            error_log("Fout bij verwijderen product: " . $e->getMessage());
+        }
+    }
     // Gebruiker bijwerken logica
     if(isset($_POST['edit_user'])) {
         try {
@@ -85,7 +142,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apothecare</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/adminstyles.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
@@ -127,30 +184,30 @@ try {
             <h1>Gebruikersbeheer</h1>
 
             <!-- Gebruiker toevoegen -->
-            <form method="POST" style="background:#fff; padding:15px; border-radius:8px; width:400px;">
+            <form method="POST" class="card-form">
                 <h3>Nieuwe gebruiker toevoegen</h3>
-                <input type="text" name="name" placeholder="Naam" required style="width:100%; margin-bottom:8px;">
-                <input type="email" name="email" placeholder="E-mailadres" required style="width:100%; margin-bottom:8px;">
-                <input type="password" name="password" placeholder="Wachtwoord" required style="width:100%; margin-bottom:8px;">
-                <select name="role" required style="width:100%; margin-bottom:10px;">
+                <input class="input-full" type="text" name="name" placeholder="Naam" required>
+                <input class="input-full" type="email" name="email" placeholder="E-mailadres" required>
+                <input class="input-full" type="password" name="password" placeholder="Wachtwoord" required>
+                <select class="input-full" name="role" required>
                     <option value="customer">customer</option>
                     <option value="admin">Admin</option>
                 </select>
-                <button type="submit" name="add_user" style="padding:8px 16px; background:#67a746; border:none; color:white; border-radius:5px;">Toevoegen</button>
+                <button class="btn-primary" type="submit" name="add_user">Toevoegen</button>
             </form>
 
     <!-- Gebruikerslijst -->
-    <div style="margin-top:30px;">
+        <div class="section-gap">
         <h3>Bestaande gebruikers</h3>
-        <div style="overflow-x:auto;">
-            <table style="width:80%; border-collapse:collapse; background:#fff; margin:20px 0; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+    <div class="table-wrapper">
+            <table class="data-table">
                 <thead>
-                    <tr style="background:#2a7a8c; color:white;">
-                        <th style="padding:12px 15px; text-align:left;">ID</th>
-                        <th style="padding:12px 15px; text-align:left;">Naam</th>
-                        <th style="padding:12px 15px; text-align:left;">Email</th>
-                        <th style="padding:12px 15px; text-align:left;">Rol</th>
-                        <th style="padding:12px 15px; text-align:left;">Acties</th>
+                    <tr class="table-head">
+                        <th>ID</th>
+                        <th>Naam</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acties</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,30 +220,23 @@ try {
 
                         if($users) {
                             foreach($users as $user) {
-                                echo "<tr style='border-bottom:1px solid #eee;'>";
-                                echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['id']) . "</td>";
-                                echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['name']) . "</td>";
-                                echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['email']) . "</td>";
-                                echo "<td style='padding:12px 15px; color:#333;'>" . htmlspecialchars($user['role']) . "</td>";
-                                echo "<td style='padding:12px 15px;'>";
-                                echo "<button onclick='openEditModal(" . json_encode($user) . ")' 
-                                      style='color:#2a7a8c; text-decoration:none; padding:5px 10px; border-radius:3px; 
-                                      background:#e3f2fd; border:none; cursor:pointer; margin-right:5px; transition:all 0.3s ease;'>
-                                      Bewerken</button>";
-                                echo "<a href='?delete=" . $user['id'] . "' 
-                                      onclick='return confirm(\"Weet je zeker dat je deze gebruiker wilt verwijderen?\")' 
-                                      style='color:#ff4444; text-decoration:none; padding:5px 10px; border-radius:3px; 
-                                      background:#fff0f0; transition:all 0.3s ease;'>Verwijderen</a>";
+                                echo "<tr class='data-row'>";
+                                echo "<td class='data-td'>" . htmlspecialchars($user['id']) . "</td>";
+                                echo "<td class='data-td'>" . htmlspecialchars($user['name']) . "</td>";
+                                echo "<td class='data-td'>" . htmlspecialchars($user['email']) . "</td>";
+                                echo "<td class='data-td'>" . htmlspecialchars($user['role']) . "</td>";
+                                echo "<td class='data-td'>";
+                                echo "<button class='action-btn' onclick='openEditModal(" . json_encode($user) . ")'>Bewerken</button>";
+                                echo "<a class='delete-link' href='?delete=" . $user['id'] . "' onclick='return confirm(\"Weet je zeker dat je deze gebruiker wilt verwijderen?\")'>Verwijderen</a>";
                                 echo "</td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='5' style='text-align:center; padding:15px;'>Geen gebruikers gevonden</td></tr>";
+                            echo "<tr class='no-data-row'><td colspan='5' class='no-data'>Geen gebruikers gevonden</td></tr>";
                         }
-                    } catch(PDOException $e) {
+                        } catch(PDOException $e) {
                         error_log("Error bij ophalen gebruikers: " . $e->getMessage());
-                        echo "<tr><td colspan='5' style='text-align:center; padding:15px; color:#721c24; 
-                              background:#f8d7da; border-color:#f5c6cb;'>Er is een probleem opgetreden bij het laden van de gebruikers.</td></tr>";
+                        echo "<tr class='error-row'><td colspan='5' class='error-cell'>Er is een probleem opgetreden bij het laden van de gebruikers.</td></tr>";
                     }
                     ?>
                 </tbody>
@@ -195,48 +245,39 @@ try {
     </div>
 
     <!-- Bewerk Modal -->
-    <div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-         background:rgba(0,0,0,0.5); z-index:1000;">
-        <div style="position:relative; background:white; width:400px; margin:100px auto; padding:20px; border-radius:8px;">
-            <h3 style="color:#333; margin-bottom:20px;">Gebruiker Bewerken</h3>
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-container">
+            <h3 class="modal-title">Gebruiker Bewerken</h3>
             <form method="POST" id="editForm">
                 <input type="hidden" name="user_id" id="edit_user_id">
                 <input type="hidden" name="edit_user" value="1">
-                
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; color:#333;">Naam:</label>
-                    <input type="text" name="name" id="edit_name" required 
-                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+
+                <div class="form-row">
+                    <label class="form-label">Naam:</label>
+                    <input class="input-field" type="text" name="name" id="edit_name" required>
                 </div>
 
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; color:#333;">Email:</label>
-                    <input type="email" name="email" id="edit_email" required 
-                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                <div class="form-row">
+                    <label class="form-label">Email:</label>
+                    <input class="input-field" type="email" name="email" id="edit_email" required>
                 </div>
 
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; color:#333;">Nieuw Wachtwoord: (laat leeg om niet te wijzigen)</label>
-                    <input type="password" name="password" id="edit_password"
-                           style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                <div class="form-row">
+                    <label class="form-label">Nieuw Wachtwoord: (laat leeg om niet te wijzigen)</label>
+                    <input class="input-field" type="password" name="password" id="edit_password">
                 </div>
 
-                <div style="margin-bottom:15px;">
-                    <label style="display:block; margin-bottom:5px; color:#333;">Rol:</label>
-                    <select name="role" id="edit_role" required 
-                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; color:#333;">
+                <div class="form-row">
+                    <label class="form-label">Rol:</label>
+                    <select class="input-field" name="role" id="edit_role" required>
                         <option value="customer">Klant</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
 
-                <div style="display:flex; justify-content:flex-end; gap:10px;">
-                    <button type="button" onclick="closeEditModal()" 
-                            style="padding:8px 16px; background:#f44336; border:none; color:white; border-radius:4px; cursor:pointer;">
-                            Annuleren</button>
-                    <button type="submit" 
-                            style="padding:8px 16px; background:#67a746; border:none; color:white; border-radius:4px; cursor:pointer;">
-                            Opslaan</button>
+                <div class="modal-actions">
+                    <button type="button" class="btn-danger" onclick="closeEditModal()">Annuleren</button>
+                    <button type="submit" class="btn-primary">Opslaan</button>
                 </div>
             </form>
         </div>
@@ -268,8 +309,95 @@ try {
         </div>
 
         <div id="Voorraad" class="content-panel">
-            <h1>Voorraad</h1>
-            <p>Hier kunt u de actuele voorraad van medicijnen en andere producten bekijken en beheren.</p>
+            <h1>Voorraadbeheer</h1>
+
+            <!-- Product toevoegen -->
+            <form method="POST" class="card-form">
+                <h3>Nieuw product toevoegen</h3>
+                <input class="input-full" type="text" name="product_name" placeholder="Product naam" required>
+                <input class="input-full" type="number" name="price" placeholder="Prijs" step="0.01" required>
+                <input class="input-full" type="number" name="stock" placeholder="Voorraad" required>
+                <button class="btn-primary" type="submit" name="add_product">Product Toevoegen</button>
+            </form>
+
+            <!-- Voorraadlijst -->
+            <div class="section-gap">
+                <h3>Huidige voorraad</h3>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr class="table-head">
+                                <th>ID</th>
+                                <th>Productnaam</th>
+                                <th>Prijs</th>
+                                <th>Voorraad</th>
+                                <th>Acties</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            try {
+                                $query = "SELECT * FROM products ORDER BY id";
+                                $stmt = $pdo->prepare($query);
+                                $stmt->execute();
+                                $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                if($products) {
+                                    foreach($products as $product) {
+                                        echo "<tr class='data-row'>";
+                                        echo "<td class='data-td'>" . htmlspecialchars($product['id']) . "</td>";
+                                        echo "<td class='data-td'>" . htmlspecialchars($product['name']) . "</td>";
+                                        echo "<td class='data-td'>€" . htmlspecialchars(number_format($product['price'], 2)) . "</td>";
+                                        echo "<td class='data-td'>" . htmlspecialchars($product['stock']) . "</td>";
+                                        echo "<td class='data-td'>";
+                                        echo "<button class='action-btn' onclick='openEditProductModal(" . json_encode($product) . ")'>Bewerken</button>";
+                                        echo "<a class='delete-link' href='?delete_product=" . $product['id'] . "' onclick='return confirm(\"Weet je zeker dat je dit product wilt verwijderen?\")'>Verwijderen</a>";
+                                        echo "</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr class='no-data-row'><td colspan='5' class='no-data'>Geen producten gevonden</td></tr>";
+                                }
+                            } catch(PDOException $e) {
+                                error_log("Error bij ophalen producten: " . $e->getMessage());
+                                echo "<tr class='error-row'><td colspan='5' class='error-cell'>Er is een probleem opgetreden bij het laden van de producten.</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Product bewerken modal -->
+            <div id="editProductModal" class="modal-overlay">
+                <div class="modal-container">
+                    <h3 class="modal-title">Product Bewerken</h3>
+                    <form method="POST" id="editProductForm">
+                        <input type="hidden" name="product_id" id="edit_product_id">
+                        <input type="hidden" name="edit_product" value="1">
+
+                        <div class="form-row">
+                            <label class="form-label">Productnaam:</label>
+                            <input class="input-field" type="text" name="product_name" id="edit_product_name" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Prijs:</label>
+                            <input class="input-field" type="number" name="price" id="edit_price" step="0.01" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Voorraad:</label>
+                            <input class="input-field" type="number" name="stock" id="edit_stock" required>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="btn-danger" onclick="closeEditProductModal()">Annuleren</button>
+                            <button type="submit" class="btn-primary">Opslaan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="Bestellingen" class="content-panel">
@@ -339,6 +467,27 @@ try {
                 profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
             }
         });
+
+        // Product modal functies
+        function openEditProductModal(product) {
+            document.getElementById('editProductModal').style.display = 'block';
+            document.getElementById('edit_product_id').value = product.id;
+            document.getElementById('edit_product_name').value = product.name;
+            document.getElementById('edit_price').value = product.price;
+            document.getElementById('edit_stock').value = product.stock;
+        }
+
+        function closeEditProductModal() {
+            document.getElementById('editProductModal').style.display = 'none';
+        }
+
+        // Sluit product modal als er buiten wordt geklikt
+        window.onclick = function(event) {
+            const modal = document.getElementById('editProductModal');
+            if (event.target == modal) {
+                closeEditProductModal();
+            }
+        }
     </script>
 
 </body>
