@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-if ($user && $user['role'] == 'admin' && password_verify($password, $user['password'])) { //check admin inloggen met veilige hash verify
+if ($user && $user['role'] == 'admin' && $password == $user['password']) { //check admin inloggen
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_name'] = $user['name'];
