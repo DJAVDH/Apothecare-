@@ -1,11 +1,34 @@
-/* Algemene stijlen */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #2a7a8c; /* De blauwgroene achtergrondkleur */
-            height: 100%;
-        }
+/* Algemene stijlen en kleurvariabelen */
+:root {
+    --admin-background: #247BA0; /* donkerblauw-groen voor admin header/nav */
+    --page-background: #247BA0;
+    --button-color: #67a746; /* primaire actieknop (groen) */
+    --button-hover: #459132;
+    --logo-text-color: #0A3D62;
+    --text-color: #333333;
+    --white-background: #ffffff;
+    --light-gray-text: #666666;
+    --section-background: #f8f9fa;
+    --muted-red: #ff4444;
+    --light-blue: #e3f2fd;
+    --border-color: #dddddd;
+    --light-bg: #bbdefb;
+    --panel-bg: #f0f0f0;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--white-background);
+    height: 100%;
+    color: var(--text-color);
+}
+
+/* Specifieke admin body achtergrond (gebruikt in adminpagina.php als class="admin-body") */
+.admin-body {
+    background-color: var(--admin-background);
+}
 
         /* Header sectie */
         .header {
@@ -13,8 +36,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
+            background-color: var(--white-background);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo {
@@ -22,12 +45,12 @@
             align-items: center;
             font-size: 24px;
             font-weight: bold;
-            color: #2a7a8c;
+            color: var(--admin-background);
         }
 
         .logo-icon {
             font-size: 32px;
-            color: #4CAF50; /* Groene kleur voor het kruis */
+            color: var(--button-color); /* Groene kleur voor het kruis */
             margin-right: 10px;
         }
 
@@ -42,25 +65,26 @@
             padding: 8px 20px;
             font-size: 16px;
             font-weight: bold;
-            color: #4CAF50;
-            background-color: #ffffff;
-            border: 2px solid #4CAF50;
+            color: var(--button-color);
+            background-color: var(--white-background);
+            border: 2px solid var(--button-color);
             border-radius: 5px;
             cursor: pointer;
             margin-right: 20px;
+            transition: all 0.2s ease;
         }
 
         .cart-icon {
             font-size: 28px;
             cursor: pointer;
-            color: #247BA0;
+            color: var(--page-background);
         }
         
         .profile-circle {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #bbdefb;
+            background: var(--light-bg); /* lichte achtergrond */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -71,7 +95,7 @@
         .profile-circle .profile-icon-head {
             width: 12px;
             height: 12px;
-            background: #247BA0;
+            background: var(--page-background);
             border-radius: 50%;
             position: absolute;
             top: 7px;
@@ -80,7 +104,7 @@
         .profile-circle .profile-icon-body {
             width: 16px;
             height: 8px;
-            background: #247BA0;
+            background: var(--page-background);
             border-radius: 8px 8px 12px 12px;
             position: absolute;
             top: 18px;
@@ -92,8 +116,8 @@
             position: absolute;
             top: 50px;
             right: 0;
-            background: #fff;
-            border: 1px solid #bbdefb;
+            background: var(--white-background);
+            border: 1px solid var(--light-bg);
             border-radius: 10px;
             box-shadow: 0 4px 16px rgba(36,123,160,0.12);
             min-width: 140px;
@@ -108,18 +132,18 @@
             padding: 8px 20px;
         }
         .profile-menu li a {
-            color: #247BA0;
+            color: var(--page-background);
             text-decoration: none;
             font-size: 15px;
             display: block;
         }
         .profile-menu li a:hover {
-            background: #bbdefb;
+            background: var(--light-bg);
         }
 
         /* Navigatiebalk met tabs */
         .nav-bar {
-            background-color: #2a7a8c;
+            background-color: var(--admin-background);
             padding: 10px 20px 0 20px;
             border-bottom: 2px solid black;
         }
@@ -136,7 +160,7 @@
             border: 2px solid black;
             border-bottom: none;
             border-radius: 8px 8px 0 0;
-            background-color: #ffffff;
+            background-color: var(--white-background);
             margin-right: 8px;
             position: relative;
             top: 2px; /* Zorgt ervoor dat de onderkant over de lijn valt */
@@ -144,14 +168,14 @@
 
         /* Stijl voor de actieve tab */
         .tab-button.active {
-            background-color: #f0f0f0;
-            border-color: #000;
+            background-color: var(--panel-bg);
+            border-color: var(--text-color);
         }
 
         /* Content sectie */
         .content-area {
             padding: 30px;
-            color: white;
+            color: var(--white-background); /* content-area tekstkleur (op donkere admin achtergrond) */
         }
 
         .content-panel {
@@ -168,8 +192,8 @@
             justify-content: flex-start;
             align-items: center;
             padding: 15px 40px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #bbdefb;
+            background-color: var(--white-background);
+            border-bottom: 1px solid var(--light-bg);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
@@ -188,13 +212,180 @@
         .logo-text {
             font-size: 30px;
             font-weight: 700;
-            color: #0A3D62;
+            color: var(--logo-text-color);
         }
 
 .user-table {
-    color: #000;         /* zwarte tekst */
+    color: var(--text-color);         /* zwarte tekst */
     padding: 10px;
     text-align: left;
 }
+
+/* --- Extra admin component styles moved from adminpagina.php --- */
+.card-form {
+    background: var(--white-background);
+    padding: 15px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 18px;
+}
+
+/* Zorg dat tekst in witte kaarten en modals donker is (overerving van .content-area is wit) */
+.card-form,
+.card-form h3,
+.modal-container,
+.data-table {
+    color: var(--text-color);
+}
+
+.input-full {
+    width: 100%;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+
+.input-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+    box-sizing: border-box;
+    margin-bottom: 12px;
+}
+
+.btn-primary {
+    padding: 8px 16px;
+    background: var(--button-color);
+    border: none;
+    color: var(--white-background);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-danger {
+    padding: 8px 16px;
+    background: var(--muted-red);
+    border: none;
+    color: var(--white-background);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.data-table {
+    width: 80%;
+    border-collapse: collapse;
+    background: var(--white-background);
+    margin: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.data-table .table-head {
+    background: var(--page-background);
+    color: var(--white-background);
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.data-row {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-td {
+    color: var(--text-color);
+}
+
+.action-btn {
+    color: var(--admin-background);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: var(--light-blue);
+    border: none;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.delete-link {
+    color: var(--muted-red);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background: var(--section-background);
+}
+
+/* Modal helper classes (initially hidden; JS sets inline display:block/none) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none; /* hidden by default; JS toggles */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    position: relative;
+    background: var(--white-background);
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.modal-title {
+    color: var(--text-color);
+    margin-bottom: 12px;
+}
+
+.form-row {
+    margin-bottom: 10px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* helpers for content spacing and tables */
+.section-gap {
+    margin-top: 30px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.no-data {
+    text-align: center;
+    padding: 15px;
+    color: var(--text-color);
+}
+
+.error-cell {
+    text-align: center;
+    padding: 15px;
+    color: var(--text-color);
+    background: var(--muted-red);
+    border-color: var(--border-color);
+}
+
 
 
