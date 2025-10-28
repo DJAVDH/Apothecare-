@@ -1,5 +1,7 @@
 <?php
-
+include 'php/db_connect.php';
+include 'php/login.php';
+$currentProduct = "";
 ?>
 
 
