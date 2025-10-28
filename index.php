@@ -4,6 +4,17 @@ include 'php/db_connect.php';
 include 'php/login.php';
 //check als user is ingelogd
 $isLoggedIn = isset($_SESSION['user_id']);
+
+//haal producten uit database
+try {
+    $productStmt = $pdo->query("SELECT id, name, description, price, imglink FROM products ORDER BY id DESC LIMIT 8");
+    $products = $productStmt->fetchAll();
+} catch (PDOException $e) {
+    $products = [];
+    error_log('Product fetch failed: ' . $e->getMessage());
+}
+
+$productsAvailable = !empty($products);
 ?>
 
 <!DOCTYPE html>
@@ -42,12 +53,46 @@ $isLoggedIn = isset($_SESSION['user_id']);
                 </div>
             </div>
         </div>
-    <!--Gridbox voor producten-->
-        <section id="products" class="products-section">
-            <h2 class="products-title">Onze Producten</h2>
-            <div class="products-grid">
-                </div>
-        </section>
+    <!--Producten-->
+    <section id="products" class="products-section">
+        <h2 class="products-title">Onze Producten</h2>
+        <div class="products-grid">
+            <?php if ($productsAvailable): ?>
+                <?php foreach ($products as $product): ?>
+                    <?php
+                        $imageLink = $product['imglink'] ?? '';
+                        $imageSrc = $imageLink !== '' ? $imageLink : 'assets/img/pillen.jpg';
+                    ?>
+                    <div class="product-card"
+                        data-name="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                        data-description="<?php echo htmlspecialchars($product['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                        data-price="<?php echo htmlspecialchars(number_format((float) ($product['price'] ?? 0), 2, ',', '.'), ENT_QUOTES, 'UTF-8'); ?>"
+                        data-image="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>"
+                        data-detail-url="productpage.php?id=<?php echo urlencode($product['id']); ?>">
+                        <div class="product-card-content">
+                            <h3><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <p>
+                                <?php
+                                $description = $product['description'] ?? '';
+                                $excerpt = mb_strimwidth($description, 0, 100, '...');
+                                echo htmlspecialchars($excerpt, ENT_QUOTES, 'UTF-8');
+                                ?>
+                            </p>
+                            <img src="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>" class="product-card-image">
+                            <div class="product-card-footer">
+                                <span class="product-price">€ <?php echo htmlspecialchars(number_format((float) ($product['price'] ?? 0), 2, ',', '.'), ENT_QUOTES, 'UTF-8'); ?></span>
+                                <button class="details-button" type="button">Bekijk details</button>
+                                <button class="add-to-cart-button" type="button">Voeg toe aan winkelmandje</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="no-products-message">Er zijn momenteel geen producten beschikbaar.</p>
+            <?php endif; ?>
+        </div>
+    </section>
+
     </main>
     <!--Chat-->
     <button class="chat-button" aria-label="Open AI Chat">
