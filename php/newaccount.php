@@ -1,16 +1,19 @@
 <?php
-echo("test")
+session_start();
+include 'db_connect.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim(string: $_POST['email']);
+    $password = trim(string: $_POST['password']);
+    $name = trim(string: $_POST['name']);
+    $role = 'customer';
+}
+
+if ($email) {
+    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$name, $email, $password, $role]);
+    $_SESSION['success'] = 'Account aangemaakt!';
+    header('Location: ../loginpage.php');
+    exit;
+}
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Account has been made!
-</body>
-</html>

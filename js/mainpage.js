@@ -1,124 +1,78 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Array met productinformatie
-    const products = [
-        {
-            name: "Paracetamol 500mg",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Paracetamol",
-            description: "Effectief bij koorts en pijn bij griep en verkoudheid, hoofdpijn, kiespijn, zenuwpijn, spierpijn en menstruatiepijn. Werkt pijnstillend en koortsverlagend."
-        },
-        {
-            name: "Ibuprofen 400mg",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Ibuprofen",
-            description: "Een ontstekingsremmende pijnstiller (NSAID). Het werkt pijnstillend, ontstekingsremmend en koortsverlagend. Te gebruiken bij diverse soorten pijn."
-        },
-        {
-            name: "Xylometazoline Neusspray",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Neusspray",
-            description: "Voor de behandeling van een verstopte neus. Het vermindert de zwelling van het neusslijmvlies, waardoor u vrijer kunt ademen."
-        },
-        {
-            name: "Broomhexine Hoestsiroop",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Hoestsiroop",
-            description: "Maakt vastzittend slijm in de luchtwegen dunner, waardoor het ophoesten makkelijker wordt. Voor gebruik bij vastzittende hoest."
-        },
-        {
-            name: "Waterproof Pleisters",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Pleisters",
-            description: "Een assortiment van waterbestendige pleisters om kleine wondjes te beschermen. Ze zijn flexibel en laten de huid ademen."
-        },
-        {
-            name: "Vitamine C Bruistabletten",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Vitamine+C",
-            description: "Ondersteunt het immuunsysteem en helpt bij vermoeidheid. Eén bruistablet per dag is voldoende voor de dagelijkse behoefte."
-        },
-        {
-            name: "Zonnebrandcrème SPF 30",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Zonnebrand",
-            description: "Biedt een hoge bescherming tegen schadelijke UVA- en UVB-stralen. Hydraterend en waterresistent. Geschikt voor de gevoelige huid."
-        },
-        {
-            name: "Desinfecterende Handgel",
-            image: "https://placehold.co/400x300/a7f3d0/333?text=Handgel",
-            description: "Reinigt de handen zonder water en zeep. Doodt 99,9% van de bacteriën. Ideaal voor onderweg, op het werk of op reis."
-        }
-    ];
-
-    // Selecteer de DOM-elementen voor producten
     const productsGrid = document.querySelector('.products-grid');
+    if (!productsGrid) {
+        return;
+    }
+
     const modalOverlay = document.getElementById('productModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
     const modalCloseButton = document.getElementById('modalClose');
     const searchInput = document.querySelector('.search-input');
 
+    const productData = Array.from(productsGrid.querySelectorAll('.product-card')).map(card => ({
+        element: card,
+        name: card.dataset.name || card.querySelector('h3')?.textContent?.trim() || '',
+        description: card.dataset.description || card.querySelector('p')?.textContent?.trim() || '',
+        price: card.dataset.price || '',
+        image: card.dataset.image || card.querySelector('img')?.getAttribute('src') || '',
+        detailUrl: card.dataset.detailUrl || ''
+    }));
+
+    productData.forEach(product => {
+        const detailsButton = product.element.querySelector('.details-button');
+        if (detailsButton) {
+            detailsButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                openModal(product);
+            });
+        }
+
+        const addToCartButton = product.element.querySelector('.add-to-cart-button');
+        if (addToCartButton) {
+            addToCartButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                // TODO: voeg winkelmand functionaliteit toe
+            });
+        }
+
+        product.element.addEventListener('click', (event) => {
+            if (event.target.closest('.details-button') || event.target.closest('.add-to-cart-button')) {
+                return;
+            }
+
+            if (product.detailUrl) {
+                window.location.href = product.detailUrl;
+            }
+        });
+    });
+
     // Functie om producten te filteren en weer te geven
     function filterProducts(searchTerm) {
-        const filteredProducts = products.filter(product => {
-            const searchLower = searchTerm.toLowerCase();
-            return product.name.toLowerCase().includes(searchLower) ||
-                   product.description.toLowerCase().includes(searchLower);
-        });
-        
-        // Maak de products grid leeg
-        productsGrid.innerHTML = '';
-        
-        // Voeg de gefilterde producten toe
-        filteredProducts.forEach(product => {
-            const card = createProductCard(product);
-            productsGrid.appendChild(card);
-        });
-    }
+        const searchLower = searchTerm.trim().toLowerCase();
 
-    // Functie om een product kaart te maken
-    function createProductCard(product) {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-card-content">
-                <h3>${product.name}</h3>
-                <p>${product.description.substring(0, 100)}...</p>
-                <button class="details-button">Bekijk details</button>
-            </div>
-        `;
+        productData.forEach(product => {
+            const matches = !searchLower ||
+                product.name.toLowerCase().includes(searchLower) ||
+                product.description.toLowerCase().includes(searchLower);
 
-        card.querySelector('.details-button').addEventListener('click', () => {
-            openModal(product);
+            product.element.style.display = matches ? '' : 'none';
         });
-
-        return card;
     }
 
     // Event listener voor de zoekbalk
-    searchInput.addEventListener('input', (e) => {
-        filterProducts(e.target.value);
-    });
-
-    // Initiële weergave van alle producten
-    products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-card-content">
-                <h3>${product.name}</h3>
-                <p>${product.description.substring(0, 100)}...</p>
-                <button class="details-button">Bekijk details</button>
-            </div>
-        `;
-
-        card.querySelector('.details-button').addEventListener('click', () => {
-            openModal(product);
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            filterProducts(e.target.value);
         });
-
-        productsGrid.appendChild(card);
-    });
+    }
 
     // Functie om de product-modal te openen
     function openModal(product) {
         modalTitle.textContent = product.name;
-        modalDescription.textContent = product.description;
+        const description = product.description || 'Geen beschrijving beschikbaar.';
+        const priceInfo = product.price ? ` (Prijs: € ${product.price})` : '';
+        modalDescription.textContent = `${description}${priceInfo}`;
         modalOverlay.style.display = 'flex'; 
         setTimeout(() => modalOverlay.classList.remove('hidden'), 10);
     }
@@ -138,7 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event listeners om de product-modal te sluiten
-    modalCloseButton.addEventListener('click', closeModal);
+    if (modalCloseButton) {
+        modalCloseButton.addEventListener('click', closeModal);
+    }
     modalOverlay.addEventListener('click', (event) => {
         if (event.target === modalOverlay) {
             closeModal();

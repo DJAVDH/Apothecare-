@@ -40,7 +40,7 @@ $invalidInfo = isset($_SESSION['invalid_info']);
         <p id="error-message"></p>     
     <div class="form-buttons">
         <button type="submit">Inloggen</button>
-        <button type="button">Registreren</button><br>
+        <button type="button" onclick="window.location.href='registratiepage.php';">Registreren</button><br>
     </div>
 </form>
             </div>
