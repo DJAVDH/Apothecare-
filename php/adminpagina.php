@@ -1,7 +1,6 @@
 <?php
 require_once 'db_connect.php';
-require_once 'login.php';
-
+session_start();
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: ../index.php");
     exit();

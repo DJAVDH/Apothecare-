@@ -2,7 +2,6 @@
 //start sessie
 session_start();
 include 'db_connect.php';
-
 $error = ''; //error bericht als er is mis gaat
 
 //als server een post request is dan
