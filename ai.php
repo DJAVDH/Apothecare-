@@ -71,7 +71,6 @@ curl_setopt_array($ch, [
     CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
     CURLOPT_POSTFIELDS     => json_encode($payload, JSON_UNESCAPED_UNICODE),
     CURLOPT_RETURNTRANSFER => true,
-    // Timeout verhogen tijdens testen; productie kan korter.
     CURLOPT_TIMEOUT        => 200,
 ]);
 
