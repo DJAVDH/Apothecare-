@@ -1,5 +1,11 @@
 <?php
 require_once 'db_connect.php';
+require_once 'login.php';
+
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
 
 try {
     // === PRODUCT TOEVOEGEN ===
@@ -156,18 +162,6 @@ try {
         </div>
     </a>    
         <div class="header-right">
-            <span class="cart-icon">🛒</span>
-            <span class="profile-circle" id="profileCircle" tabindex="0">
-                <span class="profile-icon-head"></span>
-                <span class="profile-icon-body"></span>
-            </span>
-            <div class="profile-menu" id="profileMenu">
-                <ul>
-                    <li><a href="#">Profiel</a></li>
-                    <li><a href="#">Instellingen</a></li>
-                    <li><a href="#">Uitloggen</a></li>
-                </ul>
-            </div>
         </div>
     </header>
 

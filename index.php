@@ -4,7 +4,6 @@ include 'php/db_connect.php';
 include 'php/login.php';
 //check als user is ingelogd
 $isLoggedIn = isset($_SESSION['user_id']);
-
 //haal producten uit database
 try {
     $productStmt = $pdo->query("SELECT id, name, description, price, imglink FROM products ORDER BY id DESC LIMIT 8");
@@ -13,7 +12,6 @@ try {
     $products = [];
     error_log('Product fetch failed: ' . $e->getMessage());
 }
-
 $productsAvailable = !empty($products);
 ?>
 
@@ -36,6 +34,7 @@ $productsAvailable = !empty($products);
         </div>
     </a> 
         <nav class="main-nav">
+            <a href="php/adminpagina.php" hidden id="admin-button" class="nav-button tertiary">Admin</a>
             <a href="#" class="nav-button secondary">Winkelmandje</a>
             <a id="LoginButton" href="loginpage.php" class="nav-button primary">Log In</a>
         </nav>
@@ -141,7 +140,11 @@ $productsAvailable = !empty($products);
         btn.href = "php/logout.php";
         welkom.textContent = "WELKOM, <?php echo htmlspecialchars($_SESSION['user_name']); ?>";
     }
+
 <?php endif; ?>
+<?php if ($_SESSION['user_role'] == 'admin') { ?>
+    document.getElementById("admin-button").hidden = false;
+<?php } ?>
     </script>
 </body>
 </html>

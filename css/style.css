@@ -103,6 +103,15 @@ body.login-page {
     color: var(--button-color);
     border-color: var(--button-color);
 }
+.nav-button.tertiary {
+    background-color: var(--page-background);
+    color: var(--white-background);
+}
+
+.nav-button.tertiary:hover {
+    background-color: #1b5a75;
+    color: var(--white-background);
+}
 
 .nav-button.secondary:hover {
     background-color: #f0fff0;
