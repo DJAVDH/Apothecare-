@@ -1,4 +1,18 @@
 <?php
+include("php/db_connect.php");
+include("php/login.php");
+
+$productId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$productId) {
+    http_response_code(400);
+    exit('Ongeldige product-ID');
+}
+
+// voorbeeld: product uit database halen
+$stmt = $pdo->prepare('SELECT name, description, price, stock, category, imglink, dose, quantity, brand FROM products WHERE id = :id');
+$stmt->execute(['id' => $productId]);
+$product = $stmt->fetch();
+
 
 ?>
 
@@ -32,29 +46,35 @@
     <main class="product-main">
         <section class="product-detail">
             <div class="product-gallery">
-                <img src="assets/img/pillen.jpg" alt="Product 1" class="product-image">
+                <img src="<?php echo $product['imglink']; ?>" alt="Product 1" class="product-image">
             </div>
             <div class="product-info">
-                <h1 class="product-title">ProductNaam</h1>
-                <p class="product-description">voorbeeldomschrijving</p>
+                <h1 class="product-title" id="productTitle"><?php echo $product['name']; ?></h1>
+                <p class="product-description"><?php echo $product['description']; ?></p>
+                <p class="product-description">Categorie: <?php echo $product['category']; ?></p>
                 <ul class="product-meta">
-                    <li><span>Gewicht:</span> gewicht</li>
-                    <li><span>Prijs:</span> €0,00</li>
-                    <li><span>Voorraad:</span> Op voorraad</li>
+                    <li><span>Prijs:</span>€<?php echo $product['price']; ?></li>
+                    <li><span>Voorraad:</span>
+                        <?php if ($product['stock'] > 0): ?>
+                            <span class="in-stock">In voorraad</span>
+                        <?php else: ?>
+                            <span class="out-of-stock">Op voorraad</span>
+                        <?php endif; ?>
+                    </li>
                 </ul>
                 <div class="product-actions">
-                    <span class="product-price">€0,00</span>
+                    <span class="product-price">€<?php echo $product['price']; ?></span>
                     <button class="winkelmandje-button">Voeg toe aan winkelmandje</button>
                 </div>
             </div>
         </section>
 
         <section class="product-specificaties">
-            <h2>Waarom dit product?</h2>
+            <h2>Specificaties van product</h2>
             <ul>
-                <li>Specificatie1</li>
-                <li>Specificatie2</li>
-                <li>Specificatie3</li>
+                <li>Dosering: <?php echo $product['dose']; ?></li>
+                <li>Hoeveelheid: <?php echo $product['quantity']; ?></li>
+                <li>Merk: <?php echo $product['brand']; ?></li>
             </ul>
         </section>
     </main>

@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($email) {
     $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
     $stmt->execute([$name, $email, $password, $role]);
-    $_SESSION['success'] = 'Account aangemaakt!';
     header('Location: ../loginpage.php');
     exit;
 }
