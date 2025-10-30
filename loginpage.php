@@ -1,0 +1,57 @@
+<?php
+include 'php/db_connect.php';
+include 'php/login.php';
+$invalidInfo = isset($_SESSION['invalid_info']);
+?>
+
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apotheek Login</title> 
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <!--Header-->
+    <header class="main-header">
+    <a href="index.php" class="logo-link">
+        <div class="logo-container">
+            <img src="assets/img/aptoocare.png" alt="Apothecare Logo" class="aptoocare-logo">
+            <div class="logo-text">Apothecare</div>
+        </div>
+    </a>        
+    </header>
+    <!--Inputfield Knoppen inlog-->
+    <main class="main-content">
+        <div class="login-container enhanced-login" style="text-align: center;">
+            <!-- Logo afbeelding gecentreerd -->
+            <div style="display: flex; justify-content: center;">
+                <img src="assets//img/aptoocare.png" alt="Apotheek Logo" style="max-width: 100px; margin-bottom: 15px;">
+            </div>
+                <h2>Login</h2>
+<form class="login-form" method="POST" action="php/login.php">
+        <label for="email">E-mailadres</label>
+        <input type="email" id="email" name="email" placeholder="E-mailadres" required>  
+        <label for="password">Wachtwoord</label>
+        <input type="password" id="password" name="password" placeholder="Wachtwoord" required>
+        <p id="error-message"></p>     
+    <div class="form-buttons">
+        <button type="submit">Inloggen</button>
+        <button type="button" onclick="window.location.href='registratiepage.php';">Registreren</button><br>
+    </div>
+</form>
+            </div>
+    </main>
+        <!--Script voor wanneer inloggen niet goed gaat-->
+    <script>
+<?php if ($invalidInfo): ?>
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'Ongeldige email of wachtwoord. Probeer het opnieuw.';
+            errorMessage.style.color = 'red';
+<?php endif; ?>
+    </script>
+</body>
+</html>
