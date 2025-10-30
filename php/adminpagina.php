@@ -10,15 +10,21 @@ try {
     // === PRODUCT TOEVOEGEN ===
     if (isset($_POST['add_product'])) {
         try {
-            $insert_query = "INSERT INTO products (name, price, stock) VALUES (:name, :price, :stock)";
+            $insert_query = "INSERT INTO products (name, description, price, stock, category, imglink, dose, quantity, brand) VALUES (:name, :description, :price, :stock, :category, :imglink, :dose, :quantity, :brand)";
             $stmt_insert = $pdo->prepare($insert_query);
-            
+
             $params = [
                 ':name' => $_POST['product_name'],
+                ':description' => $_POST['description'],
                 ':price' => $_POST['price'],
-                ':stock' => $_POST['stock']
+                ':stock' => $_POST['stock'],
+                ':category' => $_POST['category'],
+                ':imglink' => $_POST['imglink'],
+                ':dose' => $_POST['dose'],
+                ':quantity' => $_POST['quantity'],
+                ':brand' => $_POST['brand']
             ];
-            
+
             if ($stmt_insert->execute($params)) {
                 header("Location: " . $_SERVER['PHP_SELF']);
                 exit();
@@ -31,16 +37,22 @@ try {
     // === PRODUCT BIJWERKEN ===
     if (isset($_POST['edit_product'])) {
         try {
-            $update_query = "UPDATE products SET name = :name, price = :price, stock = :stock WHERE id = :id";
+            $update_query = "UPDATE products SET name = :name, description = :description, price = :price, stock = :stock, category = :category, imglink = :imglink, dose = :dose, quantity = :quantity, brand = :brand WHERE id = :id";
             $stmt_update = $pdo->prepare($update_query);
-            
+
             $params = [
                 ':id' => $_POST['product_id'],
                 ':name' => $_POST['product_name'],
+                ':description' => $_POST['description'],
                 ':price' => $_POST['price'],
-                ':stock' => $_POST['stock']
+                ':stock' => $_POST['stock'],
+                ':category' => $_POST['category'],
+                ':imglink' => $_POST['imglink'],
+                ':dose' => $_POST['dose'],
+                ':quantity' => $_POST['quantity'],
+                ':brand' => $_POST['brand']
             ];
-            
+
             if ($stmt_update->execute($params)) {
                 header("Location: " . $_SERVER['PHP_SELF']);
                 exit();
@@ -325,8 +337,14 @@ try {
             <form method="POST" class="card-form">
                 <h3>Nieuw product toevoegen</h3>
                 <input class="input-full" type="text" name="product_name" placeholder="Product naam" required>
+                <textarea class="input-full" name="description" placeholder="Beschrijving" required></textarea>
                 <input class="input-full" type="number" name="price" placeholder="Prijs" step="0.01" required>
                 <input class="input-full" type="number" name="stock" placeholder="Voorraad" required>
+                <input class="input-full" type="text" name="category" placeholder="Categorie" required>
+                <input class="input-full" type="url" name="imglink" placeholder="Afbeelding URL" required>
+                <input class="input-full" type="text" name="dose" placeholder="Dosering" required>
+                <input class="input-full" type="text" name="quantity" placeholder="Aantal" required>
+                <input class="input-full" type="text" name="brand" placeholder="Merk" required>
                 <button class="btn-primary" type="submit" name="add_product">Product Toevoegen</button>
             </form>
 
@@ -392,6 +410,11 @@ try {
                         </div>
 
                         <div class="form-row">
+                            <label class="form-label">Beschrijving:</label>
+                            <textarea class="input-field" name="description" id="edit_description" required></textarea>
+                        </div>
+
+                        <div class="form-row">
                             <label class="form-label">Prijs:</label>
                             <input class="input-field" type="number" name="price" id="edit_price" step="0.01" required>
                         </div>
@@ -399,6 +422,31 @@ try {
                         <div class="form-row">
                             <label class="form-label">Voorraad:</label>
                             <input class="input-field" type="number" name="stock" id="edit_stock" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Categorie:</label>
+                            <input class="input-field" type="text" name="category" id="edit_category" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Afbeelding URL:</label>
+                            <input class="input-field" type="url" name="imglink" id="edit_imglink" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Dosering:</label>
+                            <input class="input-field" type="text" name="dose" id="edit_dose" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Aantal:</label>
+                            <input class="input-field" type="text" name="quantity" id="edit_quantity" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="form-label">Merk:</label>
+                            <input class="input-field" type="text" name="brand" id="edit_brand" required>
                         </div>
 
                         <div class="modal-actions">
@@ -483,8 +531,14 @@ try {
             document.getElementById('editProductModal').style.display = 'block';
             document.getElementById('edit_product_id').value = product.id;
             document.getElementById('edit_product_name').value = product.name;
+            document.getElementById('edit_description').value = product.description || '';
             document.getElementById('edit_price').value = product.price;
             document.getElementById('edit_stock').value = product.stock;
+            document.getElementById('edit_category').value = product.category || '';
+            document.getElementById('edit_imglink').value = product.imglink || '';
+            document.getElementById('edit_dose').value = product.dose || '';
+            document.getElementById('edit_quantity').value = product.quantity || '';
+            document.getElementById('edit_brand').value = product.brand || '';
         }
 
         function closeEditProductModal() {

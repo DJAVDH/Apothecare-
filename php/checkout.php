@@ -1,8 +1,8 @@
 <?php
 require 'db_connect.php';
-echo $_SESSION['user_id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id     = $_SESSION['user_id'];
+    echo $_SESSION['user_id'];
+    $user_id = $_SESSION['user_id'];
     $streetname = $_POST['streetname'];
     $streetnumber = $_POST['streetnumber'];
     $city = $_POST['city'];
