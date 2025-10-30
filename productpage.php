@@ -1,6 +1,7 @@
 <?php
 include("php/db_connect.php");
-include("php/login.php");
+session_start();
+include("php/winkelmandje.php");
 
 $productId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$productId) {
@@ -8,11 +9,42 @@ if (!$productId) {
     exit('Ongeldige product-ID');
 }
 
+$cartNotice = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
+    $postedProductId = (int) ($_POST['productId'] ?? 0);
+    $quantity = max(1, (int) ($_POST['quantity'] ?? 1));
+
+    if ($postedProductId === $productId) {
+        $addedItem = addItem($postedProductId, $quantity);
+        if ($addedItem !== false) {
+            $cartNotice = [
+                'type' => 'success',
+                'message' => 'Product toegevoegd aan je winkelmandje.',
+            ];
+        } else {
+            $cartNotice = [
+                'type' => 'error',
+                'message' => 'Product kon niet worden toegevoegd. Probeer het later opnieuw.',
+            ];
+        }
+    } else {
+        $cartNotice = [
+            'type' => 'error',
+            'message' => 'Ongeldige product selectie.',
+        ];
+    }
+}
+
 // voorbeeld: product uit database halen
-$stmt = $pdo->prepare('SELECT name, description, price, stock, category, imglink, dose, quantity, brand FROM products WHERE id = :id');
+$stmt = $pdo->prepare('SELECT id, name, description, price, stock, category, imglink, dose, quantity, brand FROM products WHERE id = :id');
 $stmt->execute(['id' => $productId]);
 $product = $stmt->fetch();
 
+if (!$product) {
+    http_response_code(404);
+    exit('Product niet gevonden.');
+}
 
 ?>
 
@@ -37,7 +69,7 @@ $product = $stmt->fetch();
         </div>
     </a> 
         <nav class="main-nav">
-            <a href="#" class="nav-button secondary">Winkelmandje</a>
+            <a href="winkelmandjepage.php" class="nav-button secondary">Winkelmandje</a>
             <a id="LoginButton" href="loginpage.php" class="nav-button primary">Log In</a>
         </nav>
     </header>
@@ -62,9 +94,19 @@ $product = $stmt->fetch();
                         <?php endif; ?>
                     </li>
                 </ul>
+                <?php if ($cartNotice): ?>
+                    <div class="cart-notice <?php echo htmlspecialchars($cartNotice['type'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo htmlspecialchars($cartNotice['message'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                <?php endif; ?>
                 <div class="product-actions">
                     <span class="product-price">€<?php echo $product['price']; ?></span>
-                    <button class="winkelmandje-button">Voeg toe aan winkelmandje</button>
+                    <form method="POST" class="product-cart-form">
+                        <input type="hidden" name="productId" value="<?php echo (int) ($product['id'] ?? 0); ?>">
+                        <label for="quantity" class="quantity-label">Aantal:</label>
+                        <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1">
+                        <button type="submit" name="addToCart" class="winkelmandje-button">Voeg toe aan winkelmandje</button>
+                    </form>
                 </div>
             </div>
         </section>

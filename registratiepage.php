@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'php/db_connect.php';
+require'php/db_connect.php';
 
 $errors = [];
 $successMessage = '';

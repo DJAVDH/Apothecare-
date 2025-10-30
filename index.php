@@ -1,7 +1,8 @@
 <?php
 //haal database connectie en login info 
 include 'php/db_connect.php';
-include 'php/login.php';
+session_start();
+include 'php/winkelmandje.php';
 //check als user is ingelogd
 $isLoggedIn = isset($_SESSION['user_id']);
 //haal producten uit database
@@ -13,6 +14,11 @@ try {
     error_log('Product fetch failed: ' . $e->getMessage());
 }
 $productsAvailable = !empty($products);
+
+if(isset($_POST['addToCart'])) {
+    $productId = $_POST['productId'];
+    addItem($productId);
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +41,7 @@ $productsAvailable = !empty($products);
     </a> 
         <nav class="main-nav">
             <a href="php/adminpagina.php" hidden id="admin-button" class="nav-button tertiary">Admin</a>
-            <a href="#" class="nav-button secondary">Winkelmandje</a>
+            <a href="winkelmandjepage.php" class="nav-button secondary">Winkelmandje</a>
             <a id="LoginButton" href="loginpage.php" class="nav-button primary">Log In</a>
         </nav>
     </header>
@@ -68,6 +74,7 @@ $productsAvailable = !empty($products);
                         data-price="<?php echo htmlspecialchars(number_format((float) ($product['price'] ?? 0), 2, ',', '.'), ENT_QUOTES, 'UTF-8'); ?>"
                         data-image="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>"
                         data-detail-url="productpage.php?id=<?php echo urlencode($product['id']); ?>">
+                        data-id="<?php echo htmlspecialchars((string) $product['id'], ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="product-card-content">
                             <h3><?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
                             <p>
@@ -79,9 +86,12 @@ $productsAvailable = !empty($products);
                             </p>
                             <img src="<?php echo htmlspecialchars($imageSrc, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>" class="product-card-image">
                             <div class="product-card-footer">
-                                <span class="product-price">€ <?php echo htmlspecialchars(number_format((float) ($product['price'] ?? 0), 2, ',', '.'), ENT_QUOTES, 'UTF-8'); ?></span>
-                                <button class="details-button" type="button">Bekijk details</button>
-                                <button class="add-to-cart-button" type="button">Voeg toe aan winkelmandje</button>
+                                <form method="POST" action="index.php">
+                                    <input type="hidden" name="productId" value="<?php echo $product['id']?>">
+                                    <span class="product-price">€ <?php echo htmlspecialchars(number_format((float) ($product['price'] ?? 0), 2, ',', '.'), ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <button class="details-button" type="button">Bekijk details</button>
+                                    <button type="submit" name="addToCart" class="add-to-cart-button" value="add">Voeg toe aan winkelmandje</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -91,6 +101,29 @@ $productsAvailable = !empty($products);
             <?php endif; ?>
         </div>
     </section>
+    <script>
+        function addToCart(productId) {
+            fetch('php/winkelmandje.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'add',
+                    productId: productId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+        }
+    </script>
 
     </main>
     <!--Chat-->
