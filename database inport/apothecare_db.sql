@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 15 okt 2025 om 15:27
+-- Gegenereerd op: 30 okt 2025 om 01:45
 -- Serverversie: 10.4.32-MariaDB
 -- PHP-versie: 8.2.12
 
@@ -30,6 +30,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
+  `streetname` text NOT NULL,
+  `streetnumber` int(11) NOT NULL,
+  `city` text NOT NULL,
+  `postalcode` text NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `total` decimal(10,2) DEFAULT NULL,
   `status` varchar(50) DEFAULT 'Nieuw'
@@ -61,8 +65,20 @@ CREATE TABLE `products` (
   `description` text DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
-  `category` varchar(50) DEFAULT NULL
+  `category` varchar(50) DEFAULT NULL,
+  `imglink` text DEFAULT NULL,
+  `dose` text NOT NULL,
+  `quantity` text NOT NULL,
+  `brand` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `category`, `imglink`, `dose`, `quantity`, `brand`) VALUES
+(2, 'Paracetemol', 'Pijnstiller voor pijn', 15.99, 20, 'Tablet', 'https://www.kruidvat.nl/medias/sys_master/prd-images/h31/hc6/44255134122014/prd-front-5568144-1_600x600/prd-front-5568144-1-600x600.jpg', '500g', '50 Tabletten', 'Kruidvat'),
+(3, 'Ibuprofen', 'Sterke pijnstiller', 34.00, 64, 'Pillen', 'https://www.trekpleister.nl/medias/sys_master/prd-images/h99/ha9/30929373626398/prd-front-2849631-1_600x600/prd-front-2849631-1-600x600.jpg', '400mg', '20 Capsules', 'Trekpleister');
 
 -- --------------------------------------------------------
 
@@ -83,9 +99,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`) VALUES
-(1, 'Delano', 'delano@test.nl', '$2y$10$jMv0e3DmZ6WMov/cKwOLEusH5BF7HZIp7TPZcrHxOyYYdFVAvMdeW', 'admin'),
+(1, 'Delanoooooo', 'delano@test.nl', '$2y$10$jMv0e3DmZ6WMov/cKwOLEusH5BF7HZIp7TPZcrHxOyYYdFVAvMdeW', 'admin'),
 (2, 'admin', 'admin@apothecare.com', 'admin12345', 'admin'),
-(3, 'john', 'john@gmail.com', 'password', 'customer');
+(3, 'john', 'john@gmail.com', 'password', 'customer'),
+(4, 'testuser', 'user@klant.com', '123456', 'customer'),
+(6, 'Epstein', 'Jeffery@epstein.island', 'abcdefg', 'admin');
 
 --
 -- Indexen voor geëxporteerde tabellen
@@ -139,13 +157,13 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT voor een tabel `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT voor een tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Beperkingen voor geëxporteerde tabellen

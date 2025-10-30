@@ -1,7 +1,7 @@
 <?php
 include 'php/db_connect.php';
 include 'php/winkelmandje.php';
-
+include 'php/checkout.php';
 $redirectUrl = $_SERVER['PHP_SELF'] ?? 'winkelmandjepage.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -114,22 +114,22 @@ foreach ($cartItems as $item) {
                 <span>Totaal</span>
                 <span>€ <?php echo number_format($cartTotal, 2, ',', '.'); ?></span>
             </div>
-            <form class="checkout-form" method="post" action="checkout.php">
+            <form class="checkout-form" method="post" action="php/checkout.php">
                 <h4>Bezorgadres</h4>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="checkout-street">Straatnaam</label>
-                        <input type="text" id="checkout-street" name="street" placeholder="Bijv. Voorbeeldstraat" required>
+                        <input type="text" id="checkout-street" name="streetname" placeholder="Bijv. Voorbeeldstraat" required>
                     </div>
                     <div class="form-group">
                         <label for="checkout-house-number">Huisnummer</label>
-                        <input type="text" id="checkout-house-number" name="house_number" placeholder="Bijv. 12A" required>
+                        <input type="text" id="checkout-house-number" name="streetnumber" placeholder="Bijv. 12A" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="checkout-postcode">Postcode</label>
-                        <input type="text" id="checkout-postcode" name="postal_code" placeholder="Bijv. 1234 AB" required>
+                        <input type="text" id="checkout-postcode" name="postalcode" placeholder="Bijv. 1234 AB" required>
                     </div>
                     <div class="form-group">
                         <label for="checkout-city">Plaats</label>
