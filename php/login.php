@@ -1,44 +1,58 @@
 <?php
-//start sessie
+// start sessie
 session_start();
 include 'db_connect.php';
-$error = ''; //error bericht als er is mis gaat
+$error = ''; // // error bericht als er iets mis gaat
 
-//als server een post request is dan
+// // alleen POST verwerken
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']); //maak variable van email verwijder spaties in mail
-    $password = $_POST['password']; //maak variable van wachtwoord
-    if($email && $password){ //als email en wachtwoord zijn ingevuld dan maak sql statement
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]); //voer sql statement uit met email als parameter
-    $user = $stmt->fetch(PDO::FETCH_ASSOC); //haal user data op uit database en verander in array
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    // // simpele input check
+    if ($email === '' || $password === '') {
+        $_SESSION['invalid_info'] = true; // // voor error message op login pagina
+        header('Location: ../loginpage.php');
+        exit;
     }
 
+    // // haal user op (alleen benodigde velden)
+    $stmt = $pdo->prepare("SELECT id, name, email, password, role FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC); // // user data als array
 
-if ($user && $user['role'] == 'admin' && $password == $user['password']) { //check admin inloggen
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_role'] = $user['role']; 
-            $_SESSION['logged_in'] = true;
-} elseif ($user && $user['role'] == 'customer' && $password == $user['password']) { //check klant inloggen
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_role'] = $user['role'];
-            $_SESSION['logged_in'] = true;
-} else { //als inloggen mislukt
-            $error = 'INLOG FAILED';
-            $_SESSION['invalid_info'] = true; //dit is voor error message op login pagina
+    // // controleer wachtwoord met password_verify (hash)
+    if ($user && password_verify($password, $user['password'])) {
+        // // success: sessie regenereren tegen fixation
+        session_regenerate_id(true);
 
-}
+        $_SESSION['user_id']    = $user['id'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_name']  = $user['name'];
+        $_SESSION['user_role']  = $user['role'];
+        $_SESSION['logged_in']  = true;
 
-if ($_SESSION['user_role'] == 'admin') { //als (role) dan naar (site)
-    header('Location: adminpagina.php');
-} elseif ($_SESSION['user_role'] == 'customer') {
-    header('Location: ../index.php');
-} elseif ($_SESSION['invalid_info'] == true) {
-    header('Location: ../loginpage.php');
-}
+        // // optioneel: rehash als algoritme/cost is veranderd
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT, ['cost' => 12])) {
+            $newHash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
+            $upd = $pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
+            $upd->execute([$newHash, $user['id']]);
+        }
+
+        // // role-based redirect
+        if ($user['role'] === 'admin') {
+            header('Location: adminpagina.php');
+            exit;
+        } else {
+            header('Location: ../index.php');
+            exit;
+        }
+    } else {
+        // // inloggen mislukt
+        $error = 'INLOG FAILED';
+        $_SESSION['invalid_info'] = true; // // voor error message op login pagina
+        header('Location: ../loginpage.php');
+        exit;
+    }
 }
 ?>
